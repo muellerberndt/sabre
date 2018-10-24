@@ -1,6 +1,6 @@
 # Sabre
 
-A simple command line frontend for [Mythril Platform](https://mythril.ai).
+A quick-and-dirty CLI for [Mythril Platform](https://mythril.ai).
 
 ## Usage
 
