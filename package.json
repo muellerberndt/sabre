@@ -1,0 +1,15 @@
+{
+  "name": "sabre",
+  "version": "0.0.1",
+  "description": "A quick-and-dirty frontend for Mythril Platform",
+  "main": "sabre.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/b-mueller/sabre.git"
+  },
+  "author": "Bernhard Mueller",
+  "license": "MIT",
+  "dependencies": {
+    "armlet": "^0.2.2"
+  },
+}
