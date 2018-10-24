@@ -1,2 +1,3 @@
-# sabre
-Security Verification Tool for Solidity Code
+# Sabre
+
+A simple command line frontend for [Mythril Platform](https://mythril.ai).
