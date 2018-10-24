@@ -11,5 +11,5 @@
   "license": "MIT",
   "dependencies": {
     "armlet": "^0.2.2"
-  },
+  }
 }
