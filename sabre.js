@@ -19,7 +19,7 @@ if (fs.statSync(filename)){
       deployedBytecode: contract.runtimeBytecode,
       deployedSourceMap: contract.srcmapRuntime,
       sourceList: [
-        [filename]
+        filename
       ],
       sources: {
         [filename]: input
