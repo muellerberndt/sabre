@@ -34,7 +34,7 @@ const client = new armlet.Client(
   }
 );
 
-client.analyze({data})
+client.analyze({data, timeout: 60000})
   .then(issues => {
     console.log(issues);
   }).catch(err => {
