@@ -5,12 +5,7 @@ const fs = require('fs');
 var solidity_file = process.argv[2];
 var solidity_code = fs.readFileSync(solidity_file, 'utf8');
 
-console.log(solidity_code);
-
 var output = solc.compile(solidity_code, 1);
-
-console.log(output);
-
 var contract = output.contracts[Object.keys(output.contracts)[0]];
 
 /* Format data for Mythril Platform API */
