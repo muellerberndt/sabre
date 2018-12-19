@@ -29,9 +29,8 @@ var data = {
 
 const client = new armlet.Client(
   {
-      apiKey: process.env.MYTHRIL_API_KEY,
-      inputApiUrl: process.env.MYTHRIL_API_URL,
-      userEmail: "hello@world.com",
+      ethAddress: process.env.MYTHRIL_ETH_ADDRESS,
+      password: process.env.MYTHRIL_PASSWORD
   }
 );
 

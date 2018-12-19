@@ -10,7 +10,7 @@
   "author": "Bernhard Mueller",
   "license": "MIT",
   "dependencies": {
-    "armlet": "^0.2.2",
+    "armlet": "git+ssh://git@github.com/ConsenSys/armlet.git",
     "solc": "^0.4.24"
   }
 }
