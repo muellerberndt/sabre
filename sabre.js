@@ -2,8 +2,19 @@ const armlet = require('armlet');
 const solc = require('solc');
 const fs = require('fs');
 
+if (process.argv.length != 3) {
+    console.log("Usage: " + __filename + " <solidity_file>");
+    process.exit(-1);
+}
+
 var solidity_file = process.argv[2];
-var solidity_code = fs.readFileSync(solidity_file, 'utf8');
+
+try {
+    var solidity_code = fs.readFileSync(solidity_file, 'utf8');
+} catch (err) {
+    console.log(err.message);
+    process.exit(-1);
+}
 
 var input = {
     language: 'Solidity',
@@ -22,6 +33,18 @@ var input = {
 };
 
 var compiled = JSON.parse(solc.compile(JSON.stringify(input)));
+
+if (compiled.errors) {
+
+    var len = compiled.errors.length;
+    for (var i = 0; i < len; i++) {
+        console.log(compiled.errors[i].formattedMessage);
+    }
+
+    // process.exit(-1);
+}
+
+// console.log(compiled);
 
 for (var contractName in compiled.contracts.inputfile) {
     contract = compiled.contracts.inputfile[contractName];
@@ -59,6 +82,6 @@ client.analyze({data, timeout: 60000})
   .then(issues => {
     console.log(issues);
   }).catch(err => {
-    console.log(err);
+    console.log("API error: " + err.message);
   }
 );
