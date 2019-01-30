@@ -1,6 +1,6 @@
 # Sabre
 
-Minimum viable [MythX](https://mythx.io) client. Compiles a Solidity file with solc-js an analyzes the result with MythX API.
+Minimum viable [MythX](https://mythx.io) client. Compiles and analyzes a single Solidity smart contract.
 
 ## Usage
 
@@ -13,7 +13,7 @@ $ git clone https://github.com/b-mueller/sabre/
 $ cd sabre
 ```
 
-3 Set up your environment. Use the Ethereum address you signed up with as the username.
+3. Set up your environment. Use the Ethereum address you signed up with as the username.
 
 ```
 export MYTHX_API_URL=https://api.mythx.io
