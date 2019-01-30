@@ -21,7 +21,7 @@ export MYTHX_ETH_ADDRESS=0x(...)
 export MYTHX_PASSWORD=password
 ```
 
-4. You shoud be ready to go:
+4. Run an analysis:
 
 ```
 $ node sabre.js mycontract.sol 
@@ -31,3 +31,10 @@ __mycontract.sol __
 5     Low     Function Default Visibility          https://smartcontractsecurity.github.io/SWC-registry/docs/SWC-100
 14    High    Reentrancy                           https://smartcontractsecurity.github.io/SWC-registry/docs/SWC-107
 ```
+
+## Usage
+
+See also:
+
+- [Armlet client library](https://github.com/ConsenSys/armlet)
+- [MythX documentation](https://docs.mythx.io/en/latest/)
