@@ -5,32 +5,53 @@ const fs = require('fs');
 var solidity_file = process.argv[2];
 var solidity_code = fs.readFileSync(solidity_file, 'utf8');
 
-var output = solc.compile(solidity_code, 1);
-var contract = output.contracts[Object.keys(output.contracts)[0]];
+var input = {
+    language: 'Solidity',
+    sources: {
+        inputfile: {
+            content: solidity_code
+        }
+    },
+    settings: {
+        outputSelection: {
+            '*': {
+                '*': [ '*' ]
+            }
+        }
+    }
+};
+
+var compiled = JSON.parse(solc.compile(JSON.stringify(input)));
+
+for (var contractName in compiled.contracts.inputfile) {
+    contract = compiled.contracts.inputfile[contractName];
+    break;
+}
 
 /* Format data for Mythril Platform API */
 
 var data = {
-    contractName: "Contract",
-    bytecode: contract.bytecode,
-    sourceMap: contract.srcmap,
-    deployedBytecode: contract.runtimeBytecode,
-    deployedSourceMap: contract.srcmapRuntime,
+    contractName: contractName,
+    bytecode: contract.evm.bytecode.object,
+    sourceMap: contract.evm.deployedBytecode.sourceMap,
+    deployedBytecode: contract.evm.deployedBytecode.object,
+    deployedSourceMap: contract.evm.deployedBytecode.sourceMap,
     sourceList: [
       solidity_file
     ],
-    sources: {
-      solidity_file: solidity_code
-    },
-    analysisMode: "full"
+    analysisMode: "quick",
+    sources: {}
 };
+
+data.sources[solidity_file] = {source: solidity_code};
 
 /* Instantiate Mythril Platform Client */
 
 const client = new armlet.Client(
   {
-      ethAddress: process.env.MYTHRIL_ETH_ADDRESS,
-      password: process.env.MYTHRIL_PASSWORD
+    ethAddress: process.env.MYTHX_ETH_ADDRESS,
+    password: process.env.MYTHX_PASSWORD,
+    platforms: ['sabre']  // client chargeback
   }
 );
 

@@ -10,7 +10,10 @@
   "author": "Bernhard Mueller",
   "license": "MIT",
   "dependencies": {
-    "armlet": "0.3.1",
-    "solc" : "^0.5.2"
+    "armlet": "^1.1.0",
+    "solc": "^0.5.3"
+  },
+  "bin": {
+    "sabre": "./sabre.js"
   }
 }
