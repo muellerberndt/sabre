@@ -1,6 +1,6 @@
 # Sabre
 
-Minimum viable [MythX](https://mythx.io) client. Compiles and analyzes a single Solidity smart contract.
+Minimum viable [MythX](https://mythx.io) client. Compiles a single Solidity smart contract and sends it to MythX API for security analysis.
 
 ## Usage
 
