@@ -41,15 +41,14 @@ var input = {
 
 var compiled = JSON.parse(solc.compile(JSON.stringify(input)));
 
-if (compiled.errors) {
-
-    var len = compiled.errors.length;
-    for (var i = 0; i < len; i++) {
-        console.log(compiled.errors[i].formattedMessage);
-    }
-}
-
 if (!compiled.contracts) {
+    if (compiled.errors) {
+
+        var len = compiled.errors.length;
+        for (var i = 0; i < len; i++) {
+            console.log(compiled.errors[i].formattedMessage);
+        }
+    }
     process.exit(-1);
 }
 
