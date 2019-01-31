@@ -7,12 +7,19 @@ if (process.argv.length != 3) {
     process.exit(-1);
 }
 
+var ethAddress = process.env.MYTHX_ETH_ADDRESS;
+var password = process.env.MYTHX_PASSWORD;
 var solidity_file = process.argv[2];
+
+if (!ethAddress || !password) {
+    console.log("Please set the MYTHX_ETH_ADDRESS and MYTHX_PASSWORD environment variables.");
+    process.exit(-1);
+}
 
 try {
     var solidity_code = fs.readFileSync(solidity_file, 'utf8');
 } catch (err) {
-    console.log(err.message);
+    console.log("Error opening input file" + err.message);
     process.exit(-1);
 }
 
@@ -40,11 +47,11 @@ if (compiled.errors) {
     for (var i = 0; i < len; i++) {
         console.log(compiled.errors[i].formattedMessage);
     }
-
-    // process.exit(-1);
 }
 
-// console.log(compiled);
+if (!compiled.contracts) {
+    process.exit(-1);
+}
 
 for (var contractName in compiled.contracts.inputfile) {
     contract = compiled.contracts.inputfile[contractName];
@@ -72,8 +79,8 @@ data.sources[solidity_file] = {source: solidity_code};
 
 const client = new armlet.Client(
   {
-    ethAddress: process.env.MYTHX_ETH_ADDRESS,
-    password: process.env.MYTHX_PASSWORD,
+    ethAddress: ethAddress,
+    password: password,
     platforms: ['sabre']  // client chargeback
   }
 );
