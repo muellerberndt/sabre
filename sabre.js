@@ -84,9 +84,14 @@ const client = new armlet.Client(
   }
 );
 
-client.analyze({data, timeout: 60000})
-  .then(issues => {
-    console.log(issues);
+client.analyze({data, timeout: 120000})
+  .then(results => {
+        var issues = results[0].issues;
+        var len = issues.length;
+
+        for (var i = 0; i < len; i++) {
+            console.log(issues[i]);
+        } 
   }).catch(err => {
     console.log("API error: " + err.message);
   }
