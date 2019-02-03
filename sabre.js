@@ -57,7 +57,7 @@ for (var contractName in compiled.contracts.inputfile) {
     break;
 }
 
-/* Format data for Mythril Platform API */
+/* Format data for MythX API */
 
 var data = {
     contractName: contractName,
@@ -74,13 +74,13 @@ var data = {
 
 data.sources[solidity_file] = {source: solidity_code};
 
-/* Instantiate Mythril Platform Client */
+/* Instantiate MythX Client */
 
 const client = new armlet.Client(
   {
     ethAddress: ethAddress,
     password: password,
-    platforms: ['sabre']  // client chargeback
+    platforms: ['sabre']  // Client ID
   }
 );
 
