@@ -32,7 +32,7 @@ $ node sabre.js mycontract.sol
 
 Sabre doesn't deal with Soldity files that define multiple contracts: If `solc-js` returns more than one contract it will simply submit the first one in the list.
 
-For more information visit:
+## Links
 
 - [Armlet client library](https://github.com/ConsenSys/armlet)
 - [MythX documentation](https://docs.mythx.io/en/latest/)
