@@ -1,7 +1,7 @@
 # Sabre
 [![Discord](https://img.shields.io/discord/481002907366588416.svg)](https://discord.gg/E3YrVtG)
 
-Minimum viable [MythX](https://mythx.io) client. Compiles a single Solidity smart contract and sends it to MythX API for security analysis.
+Minimum viable [MythX](https://mythx.io) client. Compiles a Solidity smart contract and sends it to MythX API for security analysis.
 
 ## Usage
 
