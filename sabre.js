@@ -11,11 +11,6 @@ var ethAddress = process.env.MYTHX_ETH_ADDRESS;
 var password = process.env.MYTHX_PASSWORD;
 var solidity_file = process.argv[2];
 
-if (!ethAddress || !password) {
-    console.log("Please set the MYTHX_ETH_ADDRESS and MYTHX_PASSWORD environment variables.");
-    process.exit(-1);
-}
-
 try {
     var solidity_code = fs.readFileSync(solidity_file, 'utf8');
 } catch (err) {
@@ -78,9 +73,9 @@ data.sources[solidity_file] = {source: solidity_code};
 
 const client = new armlet.Client(
   {
+    clientToolName: 'sabre',  // tool name useful for statistics tracking
     ethAddress: ethAddress,
     password: password,
-    platforms: ['sabre']  // Client ID
   }
 );
 
@@ -89,5 +84,5 @@ client.analyzeWithStatus({data, timeout: 120000})
         const util = require('util');
         console.log(util.inspect(result, {colors: true, depth: 6}));
   }).catch(err => {
-    console.log(err.message);
+    console.log(err);
   });
