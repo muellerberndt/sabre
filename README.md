@@ -28,9 +28,7 @@ $ cd sabre
 $ node sabre.js mycontract.sol 
 ```
 
-### Notes
-
-Sabre doesn't deal with Soldity files that define multiple contracts: If `solc-js` returns more than one contract it will simply submit the first one in the list.
+Note that Sabre doesn't deal with Soldity files that define multiple contracts. If `solc-js` returns more than one contract it will simply submit the first one in the list.
 
 ## Links
 
