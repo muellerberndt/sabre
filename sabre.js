@@ -11,14 +11,15 @@ var ethAddress = process.env.MYTHX_ETH_ADDRESS;
 var password = process.env.MYTHX_PASSWORD;
 var solidity_file = process.argv[2];
 
+let solidity_code;
 try {
-    var solidity_code = fs.readFileSync(solidity_file, 'utf8');
+    solidity_code = fs.readFileSync(solidity_file, 'utf8');
 } catch (err) {
     console.log("Error opening input file" + err.message);
     process.exit(-1);
 }
 
-var input = {
+const input = {
     language: 'Solidity',
     sources: {
         inputfile: {
@@ -34,27 +35,29 @@ var input = {
     }
 };
 
-var compiled = JSON.parse(solc.compile(JSON.stringify(input)));
+const compiled = JSON.parse(solc.compile(JSON.stringify(input)));
 
 if (!compiled.contracts) {
     if (compiled.errors) {
-
-        var len = compiled.errors.length;
-        for (var i = 0; i < len; i++) {
-            console.log(compiled.errors[i].formattedMessage);
+        for (const compiledError of compiled.errors) {
+            console.log(compiledError.formattedMessage);
         }
     }
     process.exit(-1);
 }
 
-for (var contractName in compiled.contracts.inputfile) {
-    contract = compiled.contracts.inputfile[contractName];
-    break;
+if (compiled.contracts.inputfile.length === 0) {
+    console.log("No contracts found");
+    process.exit(-1);
 }
+
+// Show report for only the first contract.
+const contractName = Object.keys(compiled.contracts.inputfile)[0];
+const contract = compiled.contracts.inputfile[contractName];
 
 /* Format data for MythX API */
 
-var data = {
+const data = {
     contractName: contractName,
     bytecode: contract.evm.bytecode.object,
     sourceMap: contract.evm.deployedBytecode.sourceMap,
