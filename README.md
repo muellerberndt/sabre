@@ -5,7 +5,7 @@ Minimum viable [MythX](https://mythx.io) client. Compiles a Solidity smart contr
 
 ## Usage
 
-**Installation:**
+### Installation
 
 ```
 $ git clone https://github.com/b-mueller/sabre/
@@ -13,7 +13,7 @@ $ cd sabre
 $ npm install && npm link
 ```
 
-**Getting API Credentials:**
+### Getting API Credentials
 
 2. Use Metamask to sign up for a free account on the [MythX website](https://mythx.io) and set your API password. Set up your environment using the Ethereum address you signed up with as the username (for increased convenience add those two lines into your `.bashrc` or `.bash_profile`).
 
@@ -22,7 +22,7 @@ export MYTHX_ETH_ADDRESS=0x(...)
 export MYTHX_PASSWORD=password
 ```
 
-3. Run an analysis:
+### Running an Analysis:
 
 ```
 $ sabre sample/token.sol
