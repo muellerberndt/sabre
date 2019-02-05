@@ -25,7 +25,7 @@ export MYTHX_PASSWORD=password
 3. Run an analysis:
 
 ```
-$ sabre examples/SimpleDAO.sol
+$ sabre sample/token.sol
 
 ```
 
