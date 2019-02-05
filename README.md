@@ -1,7 +1,7 @@
 # Sabre
 [![Discord](https://img.shields.io/discord/481002907366588416.svg)](https://discord.gg/E3YrVtG)
 
-Minimum viable [MythX](https://mythx.io) client. Compiles a Solidity smart contract and sends it to MythX API for security analysis. Analysis performed:
+Minimum viable [MythX](https://mythx.io) client. Compiles a Solidity smart contract and sends it to MythX API for security analysis. Analysis steps performed:
 
 - Static code analysis and linting (Maru)
 - Multi-TX input fuzzing (Harvey)
@@ -38,7 +38,12 @@ Note that Sabre doesn't deal with Soldity files that define multiple contracts. 
 
 MythX tool builders will earn revenue share in Dai when we go live with paid subscription plans. Details will be released soon. Ping us on [Discord](https://discord.gg/TtYVpCT) if you'd like to get involved.
 
-**See also:**
+**Some links:**
 
-- [Armlet client library](https://github.com/ConsenSys/armlet)
 - [MythX documentation](https://docs.mythx.io/en/latest/)
+- [Armlet client library](https://github.com/ConsenSys/armlet)
+- [Awesome MythX Smart Contract Security](https://github.com/b-mueller/awesome-mythx-smart-contract-security/blob/master/README.mds)
+
+
+
+
