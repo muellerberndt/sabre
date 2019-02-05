@@ -5,7 +5,7 @@ Minimum viable [MythX](https://mythx.io) client. Compiles a Solidity smart contr
 
 ## Usage
 
-1. Use Metamask to sign up for an account on the [MythX website](https://mythx.io) and set your API password.
+1. Use Metamask to sign up for a free account on the [MythX website](https://mythx.io) and set your API password.
 
 2. Get the code:
 
