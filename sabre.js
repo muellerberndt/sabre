@@ -13,19 +13,15 @@ var ethAddress = process.env.MYTHX_ETH_ADDRESS;
 var password = process.env.MYTHX_PASSWORD;
 var solidity_file = process.argv[2];
 
-if (!ethAddress || !password) {
-    console.log("Please set the MYTHX_ETH_ADDRESS and MYTHX_PASSWORD environment variables.");
-    process.exit(-1);
-}
-
+let solidity_code;
 try {
-    var solidity_code = fs.readFileSync(solidity_file, 'utf8');
+    solidity_code = fs.readFileSync(solidity_file, 'utf8');
 } catch (err) {
     console.log("Error opening input file" + err.message);
     process.exit(-1);
 }
 
-var input = {
+const input = {
     language: 'Solidity',
     sources: {
         inputfile: {
@@ -41,27 +37,29 @@ var input = {
     }
 };
 
-var compiled = JSON.parse(solc.compile(JSON.stringify(input)));
+const compiled = JSON.parse(solc.compile(JSON.stringify(input)));
 
 if (!compiled.contracts) {
     if (compiled.errors) {
-
-        var len = compiled.errors.length;
-        for (var i = 0; i < len; i++) {
-            console.log(compiled.errors[i].formattedMessage);
+        for (const compiledError of compiled.errors) {
+            console.log(compiledError.formattedMessage);
         }
     }
     process.exit(-1);
 }
 
-for (var contractName in compiled.contracts.inputfile) {
-    contract = compiled.contracts.inputfile[contractName];
-    break;
+if (compiled.contracts.inputfile.length === 0) {
+    console.log("No contracts found");
+    process.exit(-1);
 }
+
+// Show report for only the first contract.
+const contractName = Object.keys(compiled.contracts.inputfile)[0];
+const contract = compiled.contracts.inputfile[contractName];
 
 /* Format data for MythX API */
 
-var data = {
+const data = {
     contractName: contractName,
     bytecode: contract.evm.bytecode.object,
     sourceMap: contract.evm.deployedBytecode.sourceMap,
@@ -80,9 +78,9 @@ data.sources[solidity_file] = {source: solidity_code};
 
 const client = new armlet.Client(
   {
+    clientToolName: 'sabre',  // tool name useful for statistics tracking
     ethAddress: ethAddress,
     password: password,
-    platforms: ['sabre']  // Client ID
   }
 );
 
@@ -91,5 +89,5 @@ client.analyzeWithStatus({data, timeout: 120000})
         const util = require('util');
         console.log(util.inspect(result, {colors: true, depth: 6}));
   }).catch(err => {
-    console.log(err.message);
+    console.log(err);
   });

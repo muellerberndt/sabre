@@ -1,10 +1,11 @@
 # Sabre
+[![Discord](https://img.shields.io/discord/481002907366588416.svg)](https://discord.gg/E3YrVtG)
 
-Minimum viable [MythX](https://mythx.io) client. Compiles a single Solidity smart contract and sends it to MythX API for security analysis.
+Minimum viable [MythX](https://mythx.io) client. Compiles a Solidity smart contract and sends it to MythX API for security analysis.
 
 ## Usage
 
-1. Use Metamask to sign up for an account on the [MythX website](https://mythx.io) and set your API password.
+1. Use Metamask to sign up for a free account on the [MythX website](https://mythx.io) and set your API password.
 
 2. Get the code:
 
@@ -27,9 +28,9 @@ $ cd sabre
 $ node sabre.js mycontract.sol 
 ```
 
-## Usage
+Note that Sabre doesn't deal with Soldity files that define multiple contracts. If `solc-js` returns more than one contract it will simply submit the first one in the list.
 
-See also:
+## Links
 
 - [Armlet client library](https://github.com/ConsenSys/armlet)
 - [MythX documentation](https://docs.mythx.io/en/latest/)
