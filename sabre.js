@@ -14,6 +14,7 @@ var password = process.env.MYTHX_PASSWORD;
 var solidity_file = process.argv[2];
 
 let solidity_code;
+
 try {
     solidity_code = fs.readFileSync(solidity_file, 'utf8');
 } catch (err) {
@@ -33,6 +34,10 @@ const input = {
             '*': {
                 '*': [ '*' ]
             }
+        },
+        optimizer: {
+          enabled: true,
+          runs: 500
         }
     }
 };
@@ -65,9 +70,7 @@ const data = {
     sourceMap: contract.evm.deployedBytecode.sourceMap,
     deployedBytecode: contract.evm.deployedBytecode.object,
     deployedSourceMap: contract.evm.deployedBytecode.sourceMap,
-    sourceList: [
-      solidity_file
-    ],
+    sourceList: [ solidity_file ],
     analysisMode: "quick",
     sources: {}
 };
