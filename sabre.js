@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const armlet = require('armlet');
 const solc = require('solc');
 const fs = require('fs');
