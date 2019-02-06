@@ -4,8 +4,8 @@
 Minimum viable [MythX](https://mythx.io) client. Compiles a Solidity smart contract and sends it to MythX API for security analysis. Analysis steps performed:
 
 - Static code analysis and linting (Maru)
-- Multi-TX input fuzzing (Harvey)
-- Multi-TX symbolic analysis (Mythril)
+- Multi-tx input fuzzing (Harvey)
+- Multi-tx symbolic analysis (Mythril)
 
 ## Usage
 
