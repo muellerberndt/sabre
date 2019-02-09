@@ -37,7 +37,7 @@ const input = {
         },
         optimizer: {
           enabled: true,
-          runs: 500
+          runs: 200
         }
     }
 };
@@ -71,7 +71,7 @@ const data = {
     deployedBytecode: contract.evm.deployedBytecode.object,
     deployedSourceMap: contract.evm.deployedBytecode.sourceMap,
     sourceList: [ solidity_file ],
-    analysisMode: "quick",
+    analysisMode: "full",
     sources: {}
 };
 
