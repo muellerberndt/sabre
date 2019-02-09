@@ -59,7 +59,8 @@ if (compiled.contracts.inputfile.length === 0) {
 }
 
 // Show report for only the first contract.
-const contractName = Object.keys(compiled.contracts.inputfile)[0];
+//const contractName = Object.keys(compiled.contracts.inputfile)[0];
+const contractName = "BecToken";
 const contract = compiled.contracts.inputfile[contractName];
 
 /* Format data for MythX API */
@@ -71,7 +72,7 @@ const data = {
     deployedBytecode: contract.evm.deployedBytecode.object,
     deployedSourceMap: contract.evm.deployedBytecode.sourceMap,
     sourceList: [ solidity_file ],
-    analysisMode: "full",
+    analysisMode: "quick",
     sources: {}
 };
 
