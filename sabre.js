@@ -59,8 +59,7 @@ if (compiled.contracts.inputfile.length === 0) {
 }
 
 // Show report for only the first contract.
-//const contractName = Object.keys(compiled.contracts.inputfile)[0];
-const contractName = "BecToken";
+const contractName = Object.keys(compiled.contracts.inputfile)[0];
 const contract = compiled.contracts.inputfile[contractName];
 
 /* Format data for MythX API */
