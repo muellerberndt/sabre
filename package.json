@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "armlet": "^1.2.1",
-    "solc": "^0.5.3"
+    "solc": "^0.5.4"
   },
   "bin": {
     "sabre": "./sabre.js"

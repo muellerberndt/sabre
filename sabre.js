@@ -87,7 +87,7 @@ const client = new armlet.Client(
   }
 );
 
-client.analyzeWithStatus({data, timeout: 120000})
+client.analyzeWithStatus({data, timeout: 300000})
     .then(result => {
         const util = require('util');
         console.log(util.inspect(result, {colors: true, depth: 6}));
