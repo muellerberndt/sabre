@@ -21,7 +21,7 @@ $ cd sabre
 $ npm install && npm link
 ```
 
-### Getting API Credentials
+### API Credentials.
 
 2. Use Metamask to sign up for a free account on the [MythX website](https://mythx.io) and set your API password. Set up your environment using the Ethereum address you signed up with as the username (for increased convenience add those two lines into your `.bashrc` or `.bash_profile`).
 
@@ -36,7 +36,7 @@ export MYTHX_PASSWORD=password
 $ sabre sample/token.sol
 ```
 
-Note that Sabre doesn't deal with Soldity files that define multiple contracts. If `solc-js` returns more than one contract it will simply submit the first one in the list.
+Note that Sabre doesn't deal with Soldity files that define multiple contracts. If `solc-js` returns more than one contract it will analyze the first one in the list.
 
 ## Writing your own MythX Tools
 
