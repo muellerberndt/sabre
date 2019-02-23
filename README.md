@@ -1,6 +1,10 @@
 # Sabre
 [![Discord](https://img.shields.io/discord/481002907366588416.svg)](https://discord.gg/E3YrVtG)
 
+<p align="center">
+	<img src="/static/sabre_v2.jpg" width="100%"/>
+</p>
+
 Minimum viable [MythX](https://mythx.io) client. Compiles a Solidity smart contract and sends it to MythX API for security analysis. Analysis steps performed:
 
 - Static code analysis and linting (Maru)
