@@ -23,7 +23,7 @@ $ npm install && npm link
 
 ### API Credentials.
 
-2. Use Metamask to sign up for a free account on the [MythX website](https://mythx.io) and set your API password. Set up your environment using the Ethereum address you signed up with as the username (for increased convenience add those two lines into your `.bashrc` or `.bash_profile`).
+Use [Metamask](https://metamask.io) or a web3-enabled browser to sign up for a free account on the [MythX website](https://mythx.io) and set your API password. Set up your environment using the Ethereum address you signed up with as the username (for increased convenience add those two lines into your `.bashrc` or `.bash_profile`).
 
 ```
 export MYTHX_ETH_ADDRESS=0x(...)
@@ -47,7 +47,3 @@ MythX tool builders will earn revenue share in Dai when we go live with paid sub
 - [MythX documentation](https://docs.mythx.io/en/latest/)
 - [Armlet client library](https://github.com/ConsenSys/armlet)
 - [Awesome MythX Smart Contract Security](https://github.com/b-mueller/awesome-mythx-smart-contract-security/blob/master/README.mds)
-
-
-
-
