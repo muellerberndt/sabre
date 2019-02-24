@@ -3,22 +3,23 @@
 const armlet = require('armlet');
 const solc = require('solc');
 const fs = require('fs');
+const helpers = require('./lib/helpers');
 
 if (process.argv.length != 3) {
-    console.log("Usage: " + __filename + " <solidity_file>");
+    console.log('Usage: ' + __filename + ' <solidity_file>');
     process.exit(-1);
 }
 
-var ethAddress = process.env.MYTHX_ETH_ADDRESS;
-var password = process.env.MYTHX_PASSWORD;
-var solidity_file = process.argv[2];
+const ethAddress = process.env.MYTHX_ETH_ADDRESS;
+const password = process.env.MYTHX_PASSWORD;
+const solidity_file = process.argv[2];
 
 let solidity_code;
 
 try {
     solidity_code = fs.readFileSync(solidity_file, 'utf8');
 } catch (err) {
-    console.log("Error opening input file" + err.message);
+    console.log('Error opening input file' + err.message);
     process.exit(-1);
 }
 
@@ -36,8 +37,8 @@ const input = {
             }
         },
         optimizer: {
-          enabled: true,
-          runs: 200
+            enabled: true,
+            runs: 200
         }
     }
 };
@@ -54,7 +55,7 @@ if (!compiled.contracts) {
 }
 
 if (compiled.contracts.inputfile.length === 0) {
-    console.log("No contracts found");
+    console.log('No contracts found');
     process.exit(-1);
 }
 
@@ -71,7 +72,7 @@ const data = {
     deployedBytecode: contract.evm.deployedBytecode.object,
     deployedSourceMap: contract.evm.deployedBytecode.sourceMap,
     sourceList: [ solidity_file ],
-    analysisMode: "quick",
+    analysisMode: 'quick',
     sources: {}
 };
 
@@ -80,17 +81,23 @@ data.sources[solidity_file] = {source: solidity_code};
 /* Instantiate MythX Client */
 
 const client = new armlet.Client(
-  {
-    clientToolName: 'sabre',  // tool name useful for statistics tracking
-    ethAddress: ethAddress,
-    password: password,
-  }
+    {
+        clientToolName: 'sabre',  // tool name useful for statistics tracking
+        ethAddress: ethAddress,
+        password: password,
+    }
 );
+
+console.log(`Analyzing ${solidity_file}...`);
 
 client.analyzeWithStatus({data, timeout: 300000})
     .then(result => {
-        const util = require('util');
-        console.log(util.inspect(result, {colors: true, depth: 6}));
-  }).catch(err => {
-    console.log(err);
-  });
+        // const util = require('util');
+        // console.log(util.inspect(result, {colors: true, depth: 6}));
+
+        const { issues } = result;
+        helpers.doReport(data, issues);
+    })
+    .catch(err => {
+        console.log(err);
+    });
