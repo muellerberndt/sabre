@@ -7,13 +7,35 @@
     "type": "git",
     "url": "git+https://github.com/b-mueller/sabre.git"
   },
+  "keywords": [
+    "ethereum",
+    "sabre",
+    "mythril",
+    "mythX"
+  ],
+  "homepage": "https://github.com/b-mueller/sabre",
+  "bugs": {
+    "url": "https://github.com/b-mueller/sabre/issues"
+  },
   "author": "Bernhard Mueller",
   "license": "MIT",
   "dependencies": {
     "armlet": "^2.0.1",
+    "remix-lib": "^0.4.1",
     "solc": "^0.5.4"
   },
   "bin": {
     "sabre": "./sabre.js"
+  },
+  "scripts": {
+    "lint": "eslint ./sabre.js ./lib",
+    "lint:fix": "eslint --fix ./sabre.js ./lib"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.14.1"
   }
 }
