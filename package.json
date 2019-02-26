@@ -1,5 +1,5 @@
 {
-  "name": "sabre",
+  "name": "sabre-mythx",
   "version": "0.0.1",
   "description": "A quick-and-dirty frontend for MythX",
   "main": "sabre.js",
