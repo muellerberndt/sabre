@@ -16,9 +16,7 @@ Minimum viable [MythX](https://mythx.io) client. Compiles a Solidity smart contr
 ### Installation
 
 ```
-$ git clone https://github.com/b-mueller/sabre/
-$ cd sabre
-$ npm install && npm link
+$ npm install -g sabre-mythx
 ```
 
 ### API Credentials
