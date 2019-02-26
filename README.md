@@ -34,7 +34,7 @@ export MYTHX_PASSWORD=password
 $ sabre sample/token.sol
 ```
 
-Note that Sabre doesn't deal with Soldity files that define multiple contracts. If `solc-js` returns more than one contract it will analyze the first one in the list.
+Note that Sabre doesn't deal with Solidity files that contain multiple contract classes. If `solc-js` returns more than one contract it will analyze the first one in the list.
 
 ## Writing your own MythX Tools
 
