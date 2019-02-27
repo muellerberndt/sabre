@@ -10,9 +10,14 @@ if (process.argv.length != 3) {
     process.exit(-1);
 }
 
-const ethAddress = process.env.MYTHX_ETH_ADDRESS;
-const password = process.env.MYTHX_PASSWORD;
+let ethAddress = process.env.MYTHX_ETH_ADDRESS;
+let password = process.env.MYTHX_PASSWORD;
 const solidity_file = process.argv[2];
+
+if (!(ethAddress && password)) {
+    ethAddress = '0x0000000000000000000000000000000000000000';
+    password = 'trial';
+}
 
 let solidity_code;
 
