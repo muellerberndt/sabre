@@ -93,8 +93,6 @@ const client = new armlet.Client(
     }
 );
 
-console.log(`Analyzing ${solidity_file}...`);
-
 client.analyzeWithStatus({data, timeout: 300000})
     .then(result => {
         // const util = require('util');
