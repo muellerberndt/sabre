@@ -46,4 +46,4 @@ MythX tool builders will earn revenue share in Dai when we go live with paid sub
 
 - [MythX documentation](https://docs.mythx.io/en/latest/)
 - [Armlet client library](https://github.com/ConsenSys/armlet)
-- [Awesome MythX Smart Contract Security](https://github.com/b-mueller/awesome-mythx-smart-contract-security/blob/master/README.mds)
+- [Awesome MythX Smart Contract Security](https://github.com/b-mueller/awesome-mythx-smart-contract-security)
