@@ -55,14 +55,50 @@ if (!compiled.contracts) {
         for (const compiledError of compiled.errors) {
             console.log(compiledError.formattedMessage);
         }
+        process.exit(-1);
     }
-    process.exit(-1);
-}
 
-if (compiled.contracts.inputfile.length === 0) {
-    console.log('No contracts found');
-    process.exit(-1);
-}
+    let { inputfile } = compiled.contracts;
+    let contract, contractName;
+
+    if (inputfile.length === 0) {
+        console.log('No contracts found');
+        process.exit(-1);
+    } else if (inputfile.length === 1) {
+        contractName = Object.keys(inputfile)[0];
+        contract = inputfile[contractName];
+    } else {
+        /* Get the contract with largest bytecode object to generate MythX analysis report */
+
+        let bytecodes = {};
+
+        for (let key in inputfile) {
+            if (inputfile.hasOwnProperty(key)) {
+                bytecodes[inputfile[key].evm.bytecode.object.length] = key;
+            }
+        }
+
+        const largestBytecodeKey = Object.keys(bytecodes).reverse()[0];
+        contractName = bytecodes[largestBytecodeKey];
+        contract = inputfile[contractName];
+    }
+
+    /* Format data for MythX API */
+
+    const data = {
+        contractName: contractName,
+        bytecode: contract.evm.bytecode.object,
+        sourceMap: contract.evm.deployedBytecode.sourceMap,
+        deployedBytecode: contract.evm.deployedBytecode.object,
+        deployedSourceMap: contract.evm.deployedBytecode.sourceMap,
+        sourceList: [solidity_file],
+        analysisMode: 'quick',
+        sources: {}
+    };
+
+    data.sources[solidity_file] = { source: solidity_code };
+
+    /* Instantiate MythX Client */
 
 // Show report for only the first contract.
 const contractName = Object.keys(compiled.contracts.inputfile)[0];

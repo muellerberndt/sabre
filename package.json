@@ -20,9 +20,10 @@
   "author": "Bernhard Mueller",
   "license": "MIT",
   "dependencies": {
-    "armlet": "^2.0.1",
+    "armlet": "^2.1.0",
+    "openzeppelin-solidity": "^2.1.3",
     "remix-lib": "^0.4.1",
-    "solc": "^0.5.4"
+    "solc": "^0.5.5"
   },
   "bin": {
     "sabre": "./sabre.js"
@@ -36,6 +37,6 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.14.1"
+    "eslint": "^5.15.1"
   }
 }
