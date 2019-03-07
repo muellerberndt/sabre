@@ -36,7 +36,7 @@ export MYTHX_PASSWORD=password
 $ sabre sample/token.sol
 ```
 
-Note that Sabre doesn't deal with Solidity files that contain multiple contract classes. If `solc-js` returns more than one contract it will analyze the first one in the list.
+This submits t usually takes about 60 to 90 seconds to finish.
 
 ## Writing your own MythX Tools
 
