@@ -36,7 +36,7 @@ export MYTHX_PASSWORD=password
 $ sabre sample/token.sol
 ```
 
-This submits t usually takes about 60 to 90 seconds to finish.
+This analysis should take about 60 to 90 seconds to finish.
 
 ## Writing your own MythX Tools
 
