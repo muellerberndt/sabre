@@ -11,6 +11,8 @@ Minimum viable [MythX](https://mythx.io) client. Compiles a Solidity smart contr
 - Multi-tx input fuzzing (Harvey)
 - Multi-tx symbolic analysis (Mythril)
 
+**Feel free to fork and reuse this code to build awesome tools.**
+
 ## Usage
 
 ### Installation
@@ -34,11 +36,9 @@ export MYTHX_PASSWORD=password
 $ sabre sample/token.sol
 ```
 
-Note that Sabre doesn't deal with Solidity files that contain multiple contract classes. If `solc-js` returns more than one contract it will analyze the first one in the list.
+This analysis should take about 60 to 90 seconds to finish.
 
 ## Writing your own MythX Tools
-
-**Feel free to fork and reuse this code to build awesome tools.**
 
 MythX tool builders will earn revenue share in Dai when we go live with paid subscription plans. Details will be released soon. Ping us on [Discord](https://discord.gg/TtYVpCT) if you'd like to get involved.
 
@@ -46,4 +46,4 @@ MythX tool builders will earn revenue share in Dai when we go live with paid sub
 
 - [MythX documentation](https://docs.mythx.io/en/latest/)
 - [Armlet client library](https://github.com/ConsenSys/armlet)
-- [Awesome MythX Smart Contract Security](https://github.com/b-mueller/awesome-mythx-smart-contract-security/blob/master/README.mds)
+- [Awesome MythX Smart Contract Security](https://github.com/b-mueller/awesome-mythx-smart-contract-security)

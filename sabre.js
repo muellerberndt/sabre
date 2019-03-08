@@ -4,6 +4,7 @@ const armlet = require('armlet');
 const solc = require('solc');
 const fs = require('fs');
 const helpers = require('./lib/helpers');
+const releases = require('./lib/releases');
 
 if (process.argv.length != 3) {
     console.log('Usage: ' + __filename + ' <solidity_file>');
@@ -38,7 +39,7 @@ const input = {
     settings: {
         outputSelection: {
             '*': {
-                '*': [ '*' ]
+                '*': ['*']
             }
         },
         optimizer: {
@@ -48,12 +49,14 @@ const input = {
     }
 };
 
-const compiled = JSON.parse(solc.compile(JSON.stringify(input)));
+const getMythXReport = solidityCompiler => {
+    const compiled = JSON.parse(solidityCompiler.compile(JSON.stringify(input)));
 
-if (!compiled.contracts) {
-    if (compiled.errors) {
-        for (const compiledError of compiled.errors) {
-            console.log(compiledError.formattedMessage);
+    if (!compiled.contracts) {
+        if (compiled.errors) {
+            for (const compiledError of compiled.errors) {
+                console.log(compiledError.formattedMessage);
+            }
         }
         process.exit(-1);
     }
@@ -100,45 +103,43 @@ if (!compiled.contracts) {
 
     /* Instantiate MythX Client */
 
-// Show report for only the first contract.
-const contractName = Object.keys(compiled.contracts.inputfile)[0];
-const contract = compiled.contracts.inputfile[contractName];
+    const client = new armlet.Client(
+        {
+            clientToolName: 'sabre',  // tool name useful for statistics tracking
+            ethAddress: ethAddress,
+            password: password,
+        }
+    );
 
-/* Format data for MythX API */
-
-const data = {
-    contractName: contractName,
-    bytecode: contract.evm.bytecode.object,
-    sourceMap: contract.evm.deployedBytecode.sourceMap,
-    deployedBytecode: contract.evm.deployedBytecode.object,
-    deployedSourceMap: contract.evm.deployedBytecode.sourceMap,
-    sourceList: [ solidity_file ],
-    analysisMode: 'quick',
-    sources: {}
+    client.analyzeWithStatus({ data, timeout: 300000 })
+        .then(result => {
+            const { issues } = result;
+            helpers.doReport(data, issues);
+        })
+        .catch(err => {
+            console.log(err);
+        });
 };
 
-data.sources[solidity_file] = {source: solidity_code};
+/* Regex to match the version format of the Solidity */
 
-/* Instantiate MythX Client */
+const versionMatch = /\d{1,2}\.\d{1,2}\.\d{1,2}/.exec(solidity_code);
 
-const client = new armlet.Client(
-    {
-        clientToolName: 'sabre',  // tool name useful for statistics tracking
-        ethAddress: ethAddress,
-        password: password,
-    }
-);
+/* If Solidity Contract has version specified, fetch the matching solc compiler */
 
-console.log(`Analyzing ${solidity_file}...`);
+if (solidity_code.indexOf('pragma solidity') !== -1 && versionMatch && versionMatch[0] !== releases.latest) {
+    /* Get the solc remote version snapshot of the specified version in the contract */
 
-client.analyzeWithStatus({data, timeout: 300000})
-    .then(result => {
-        // const util = require('util');
-        // console.log(util.inspect(result, {colors: true, depth: 6}));
-
-        const { issues } = result;
-        helpers.doReport(data, issues);
-    })
-    .catch(err => {
-        console.log(err);
+    solc.loadRemoteVersion(releases[versionMatch[0]], function (err, solcSnapshot) {
+        if (err) {
+            console.error(err);
+        } else {
+            // NOTE: `solcSnapshot` has the same interface as `solc`
+            getMythXReport(solcSnapshot);
+        }
     });
+} else {
+    /* Use `solc`, if the specified version in the contract matches it's latest version */
+
+    getMythXReport(solc);
+}
