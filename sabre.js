@@ -105,13 +105,12 @@ const getMythXReport = solidityCompiler => {
 
     const client = new armlet.Client(
         {
-            clientToolName: 'sabre',  // tool name useful for statistics tracking
             ethAddress: ethAddress,
             password: password,
         }
     );
 
-    client.analyzeWithStatus({ data, timeout: 300000 })
+    client.analyzeWithStatus({ data, timeout: 300000, clientToolName: 'sabre'})
         .then(result => {
             const { issues } = result;
             helpers.doReport(data, issues);
