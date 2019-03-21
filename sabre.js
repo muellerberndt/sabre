@@ -3,6 +3,9 @@
 const armlet = require('armlet');
 const solc = require('solc');
 const fs = require('fs');
+const path = require('path');
+const chalk = require('chalk');
+const ora = require('ora');
 const helpers = require('./lib/helpers');
 const releases = require('./lib/releases');
 
@@ -49,13 +52,34 @@ const input = {
     }
 };
 
-const getMythXReport = solidityCompiler => {
-    const compiled = JSON.parse(solidityCompiler.compile(JSON.stringify(input)));
+const solidity_file_dir = path.dirname(solidity_file).split(path.sep).pop();
 
-    if (!compiled.contracts) {
+const getFileContent = filepath => {
+    filepath = path.join(solidity_file_dir, filepath);
+    const stats = fs.statSync(filepath);
+
+    if (stats.isFile()) {
+        return fs.readFileSync(filepath).toString();
+    } else {
+        throw new Error `File ${filepath} not found`;
+    }
+};
+
+const findImports = pathName => {
+    try {
+        return { contents: getFileContent(pathName) };
+    } catch (e) {
+        return { error: e.message };
+    }
+};
+
+const getMythXReport = solidityCompiler => {
+    const compiled = JSON.parse(solidityCompiler.compile(JSON.stringify(input), findImports));
+
+    if (!compiled.contracts || !Object.keys(compiled.contracts).length) {
         if (compiled.errors) {
             for (const compiledError of compiled.errors) {
-                console.log(compiledError.formattedMessage);
+                console.log(chalk.red(compiledError.formattedMessage));
             }
         }
         process.exit(-1);
@@ -65,7 +89,7 @@ const getMythXReport = solidityCompiler => {
     let contract, contractName;
 
     if (inputfile.length === 0) {
-        console.log('No contracts found');
+        console.log(chalk.red('✖ No contracts found'));
         process.exit(-1);
     } else if (inputfile.length === 1) {
         contractName = Object.keys(inputfile)[0];
@@ -110,29 +134,43 @@ const getMythXReport = solidityCompiler => {
         }
     );
 
-    client.analyzeWithStatus({ data, timeout: 300000, clientToolName: 'sabre'})
+    const mythxSpinner = ora({ text: 'Fetching analysis', color: 'yellow', spinner: 'bouncingBar' }).start();
+
+    client.analyzeWithStatus({ data, timeout: 300000, clientToolName: 'sabre' })
         .then(result => {
+            // Stop the spinner and clear from the terminal
+            mythxSpinner.stop();
+
             const { issues } = result;
             helpers.doReport(data, issues);
         })
         .catch(err => {
-            console.log(err);
+            // Stop the spinner and clear from the terminal
+            mythxSpinner.stop();
+
+            console.log(chalk.red(err));
         });
 };
 
-/* Regex to match the version format of the Solidity */
+/* Get the version of the Solidity Compiler */
 
-const versionMatch = /\d{1,2}\.\d{1,2}\.\d{1,2}/.exec(solidity_code);
+const version = helpers.getSolidityVersion(solidity_code);
 
 /* If Solidity Contract has version specified, fetch the matching solc compiler */
 
-if (solidity_code.indexOf('pragma solidity') !== -1 && versionMatch && versionMatch[0] !== releases.latest) {
+if (version !== releases.latest) {
     /* Get the solc remote version snapshot of the specified version in the contract */
 
-    solc.loadRemoteVersion(releases[versionMatch[0]], function (err, solcSnapshot) {
+    const solcSpinner = ora({ text: `Downloading solc v${version}`, color: 'yellow', spinner: 'bouncingBar' }).start();
+
+    solc.loadRemoteVersion(releases[version], function (err, solcSnapshot) {
+
         if (err) {
-            console.error(err);
+            solcSpinner.fail(`Downloading solc v${version} failed`);
+            console.log(chalk.red(err));
         } else {
+            solcSpinner.succeed(`Downloaded solc v${version} successfully`);
+
             // NOTE: `solcSnapshot` has the same interface as `solc`
             getMythXReport(solcSnapshot);
         }
