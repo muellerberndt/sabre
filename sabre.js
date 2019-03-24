@@ -73,6 +73,13 @@ const findImports = pathName => {
     }
 };
 
+const reger = new RegExp(/__\$\w+\$__/,"g");
+const fourtyBits = "0000000000000000000000000000000000000000";
+
+const solveDependence = byteCode => {
+    return byteCode.replace(reger, fourtyBits);
+};
+
 const getMythXReport = solidityCompiler => {
     const compiled = JSON.parse(solidityCompiler.compile(JSON.stringify(input), findImports));
 
@@ -114,9 +121,9 @@ const getMythXReport = solidityCompiler => {
 
     const data = {
         contractName: contractName,
-        bytecode: contract.evm.bytecode.object,
+        bytecode: solveDependence(contract.evm.bytecode.object),
         sourceMap: contract.evm.deployedBytecode.sourceMap,
-        deployedBytecode: contract.evm.deployedBytecode.object,
+        deployedBytecode: solveDependence(contract.evm.deployedBytecode.object),
         deployedSourceMap: contract.evm.deployedBytecode.sourceMap,
         sourceList: [solidity_file],
         analysisMode: 'quick',
