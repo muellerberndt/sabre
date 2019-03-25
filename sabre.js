@@ -16,7 +16,9 @@ if (process.argv.length != 3) {
 
 let ethAddress = process.env.MYTHX_ETH_ADDRESS;
 let password = process.env.MYTHX_PASSWORD;
+
 const solidity_file = process.argv[2];
+let sourceList = [solidity_file];
 
 if (!(ethAddress && password)) {
     ethAddress = '0x0000000000000000000000000000000000000000';
@@ -67,17 +69,20 @@ const getFileContent = filepath => {
 
 const findImports = pathName => {
     try {
+        sourceList.push(pathName);
         return { contents: getFileContent(pathName) };
     } catch (e) {
         return { error: e.message };
     }
 };
 
-const reger = new RegExp(/__\$\w+\$__/,"g");
-const fourtyBits = "0000000000000000000000000000000000000000";
+/* Dynamic linking is not supported. */
 
-const solveDependence = byteCode => {
-    return byteCode.replace(reger, fourtyBits);
+const regex = new RegExp(/__\$\w+\$__/,'g');
+const address = '0000000000000000000000000000000000000000';
+
+const replaceLinkedLibs = byteCode => {
+    return byteCode.replace(regex, address);
 };
 
 const getMythXReport = solidityCompiler => {
@@ -119,13 +124,15 @@ const getMythXReport = solidityCompiler => {
 
     /* Format data for MythX API */
 
+    // console.log(contract);
+
     const data = {
         contractName: contractName,
-        bytecode: solveDependence(contract.evm.bytecode.object),
+        bytecode: replaceLinkedLibs(contract.evm.bytecode.object),
         sourceMap: contract.evm.deployedBytecode.sourceMap,
-        deployedBytecode: solveDependence(contract.evm.deployedBytecode.object),
+        deployedBytecode: replaceLinkedLibs(contract.evm.deployedBytecode.object),
         deployedSourceMap: contract.evm.deployedBytecode.sourceMap,
-        sourceList: [solidity_file],
+        sourceList: sourceList,
         analysisMode: 'quick',
         sources: {}
     };
@@ -141,7 +148,7 @@ const getMythXReport = solidityCompiler => {
         }
     );
 
-    const mythxSpinner = ora({ text: 'Fetching analysis', color: 'yellow', spinner: 'bouncingBar' }).start();
+    const mythxSpinner = ora({ text: 'Analyzing ' + contractName, color: 'yellow', spinner: 'bouncingBar' }).start();
 
     client.analyzeWithStatus({ data, timeout: 300000, clientToolName: 'sabre' })
         .then(result => {
@@ -168,7 +175,7 @@ const version = helpers.getSolidityVersion(solidity_code);
 if (version !== releases.latest) {
     /* Get the solc remote version snapshot of the specified version in the contract */
 
-    const solcSpinner = ora({ text: `Downloading solc v${version}`, color: 'yellow', spinner: 'bouncingBar' }).start();
+    const solcSpinner = ora({ text: `Compiling with solc v${version}`, color: 'yellow', spinner: 'bouncingBar' }).start();
 
     solc.loadRemoteVersion(releases[version], function (err, solcSnapshot) {
 
