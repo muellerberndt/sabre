@@ -16,7 +16,9 @@ if (process.argv.length != 3) {
 
 let ethAddress = process.env.MYTHX_ETH_ADDRESS;
 let password = process.env.MYTHX_PASSWORD;
+
 const solidity_file = process.argv[2];
+let sourceList = [solidity_file];
 
 if (!(ethAddress && password)) {
     ethAddress = '0x0000000000000000000000000000000000000000';
@@ -53,26 +55,34 @@ const input = {
 };
 
 const solidity_file_dir = path.dirname(solidity_file).split(path.sep).pop();
-const import_paths = helpers.getImportPaths(solidity_code);
 
 const getFileContent = filepath => {
-    try {
-        filepath = path.join(solidity_file_dir, import_paths.find(p => p.indexOf(filepath) > -1));
+    filepath = path.join(solidity_file_dir, filepath);
+    const stats = fs.statSync(filepath);
 
-        if (fs.existsSync(filepath)) {
-            return fs.readFileSync(filepath).toString();
-        }
-    } catch(err) {
-        throw new Error(`Import ${filepath} not found`);
+    if (stats.isFile()) {
+        return fs.readFileSync(filepath).toString();
+    } else {
+        throw new Error `File ${filepath} not found`;
     }
 };
 
 const findImports = pathName => {
     try {
+        sourceList.push(pathName);
         return { contents: getFileContent(pathName) };
     } catch (e) {
         return { error: e.message };
     }
+};
+
+/* Dynamic linking is not supported. */
+
+const regex = new RegExp(/__\$\w+\$__/,'g');
+const address = '0000000000000000000000000000000000000000';
+
+const replaceLinkedLibs = byteCode => {
+    return byteCode.replace(regex, address);
 };
 
 const getMythXReport = solidityCompiler => {
@@ -114,13 +124,15 @@ const getMythXReport = solidityCompiler => {
 
     /* Format data for MythX API */
 
+    // console.log(contract);
+
     const data = {
         contractName: contractName,
-        bytecode: contract.evm.bytecode.object,
+        bytecode: replaceLinkedLibs(contract.evm.bytecode.object),
         sourceMap: contract.evm.deployedBytecode.sourceMap,
-        deployedBytecode: contract.evm.deployedBytecode.object,
+        deployedBytecode: replaceLinkedLibs(contract.evm.deployedBytecode.object),
         deployedSourceMap: contract.evm.deployedBytecode.sourceMap,
-        sourceList: [solidity_file],
+        sourceList: sourceList,
         analysisMode: 'quick',
         sources: {}
     };
@@ -136,7 +148,7 @@ const getMythXReport = solidityCompiler => {
         }
     );
 
-    const mythxSpinner = ora({ text: 'Fetching analysis', color: 'yellow', spinner: 'bouncingBar' }).start();
+    const mythxSpinner = ora({ text: 'Analyzing ' + contractName, color: 'yellow', spinner: 'bouncingBar' }).start();
 
     client.analyzeWithStatus({ data, timeout: 300000, clientToolName: 'sabre' })
         .then(result => {
@@ -163,7 +175,7 @@ const version = helpers.getSolidityVersion(solidity_code);
 if (version !== releases.latest) {
     /* Get the solc remote version snapshot of the specified version in the contract */
 
-    const solcSpinner = ora({ text: `Downloading solc v${version}`, color: 'yellow', spinner: 'bouncingBar' }).start();
+    const solcSpinner = ora({ text: `Compiling with solc v${version}`, color: 'yellow', spinner: 'bouncingBar' }).start();
 
     solc.loadRemoteVersion(releases[version], function (err, solcSnapshot) {
 
