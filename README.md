@@ -5,11 +5,10 @@
 	<img src="/static/sabre_v2.jpg" width="100%"/>
 </p>
 
-Minimum viable [MythX](https://mythx.io) client. Compiles a Solidity smart contract and sends it to MythX API for security analysis. Analysis steps performed:
+Minimum viable [MythX](https://mythx.io) client. Compiles and analyzes a Solidity smart contract. See also:
 
-- Static code analysis and linting (Maru)
-- Multi-tx input fuzzing (Harvey)
-- Multi-tx symbolic analysis (Mythril)
+- [The tech behind MythX smart contract security analysis](https://medium.com/consensys-diligence/the-tech-behind-mythx-smart-contract-security-analysis-32c849aedaef)
+- [Detecting the top 4 critical Ethereum smart contract vulnerabilities with MythX](https://medium.com/consensys-diligence/detecting-the-top-4-critical-smart-contract-vulnerabilities-with-mythx-9c568d7db7a6?)
 
 **Feel free to fork and reuse this code to build awesome tools.**
 
