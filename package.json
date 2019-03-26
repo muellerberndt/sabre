@@ -26,8 +26,7 @@
     "package.json": "^2.0.1",
     "remix-lib": "^0.4.1",
     "solc": "^0.5.6",
-    "solidity-parser-antlr": "^0.4.2",
-    "terminal-link": "^1.2.0"
+    "solidity-parser-antlr": "^0.4.2"
   },
   "bin": {
     "sabre": "./sabre.js"
