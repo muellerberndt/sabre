@@ -1,6 +1,6 @@
 {
   "name": "sabre-mythx",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "A quick-and-dirty frontend for MythX",
   "main": "sabre.js",
   "repository": {
@@ -27,7 +27,8 @@
     "remix-lib": "^0.4.1",
     "solc": "^0.5.6",
     "solidity-parser-antlr": "^0.4.2",
-    "terminal-link": "^1.2.0"
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.15.3"
   },
   "bin": {
     "sabre": "./sabre.js"
@@ -38,9 +39,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "devDependencies": {
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.15.3"
   }
 }
