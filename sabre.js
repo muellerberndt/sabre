@@ -58,12 +58,21 @@ const solidity_file_dir = path.dirname(solidity_file).split(path.sep).pop();
 
 const getFileContent = filepath => {
     filepath = path.join(solidity_file_dir, filepath);
-    const stats = fs.statSync(filepath);
-
+    let stats;
+    try {
+        stats = fs.statSync(filepath);
+    } catch (err) {
+        if (err.code === 'ENOENT') {
+            throw new Error(`File ${filepath} not found`);
+        } else {
+            throw err;
+        }
+    }
+    
     if (stats.isFile()) {
         return fs.readFileSync(filepath).toString();
     } else {
-        throw new Error `File ${filepath} not found`;
+        throw new Error(`${filepath} is not a file`);
     }
 };
 
