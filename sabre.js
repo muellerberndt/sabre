@@ -55,24 +55,17 @@ const input = {
 };
 
 const solidity_file_dir = path.dirname(solidity_file).split(path.sep).pop();
+const import_paths = helpers.getImportPaths(solidity_code);
 
 const getFileContent = filepath => {
-    filepath = path.join(solidity_file_dir, filepath);
-    let stats;
     try {
-        stats = fs.statSync(filepath);
-    } catch (err) {
-        if (err.code === 'ENOENT') {
-            throw new Error(`File ${filepath} not found`);
-        } else {
-            throw err;
+        filepath = path.join(solidity_file_dir, import_paths.find(p => p.indexOf(filepath) > -1));
+
+        if (fs.existsSync(filepath)) {
+            return fs.readFileSync(filepath).toString();
         }
-    }
-    
-    if (stats.isFile()) {
-        return fs.readFileSync(filepath).toString();
-    } else {
-        throw new Error(`${filepath} is not a file`);
+    } catch(err) {
+        throw new Error(`Import ${filepath} not found`);
     }
 };
 
