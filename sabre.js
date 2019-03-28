@@ -54,41 +54,46 @@ const input = {
     }
 };
 
-const solidity_file_dir = path.dirname(solidity_file).split(path.sep).pop();
+const solidity_file_dir = path.dirname(solidity_file);
 const import_paths = helpers.getImportPaths(solidity_code);
 
-const getFileContent = filepath => {
-    try {
-        filepath = path.join(solidity_file_dir, import_paths.find(p => p.indexOf(filepath) > -1));
+/*
+ * Add all the relative path imports to the input `source` list recursively
+ * Add directory to source path if both the import and recursive import do not start with `./`
+ * TODO: Support importing contracts from `node_modules`
+ */
 
-        if (fs.existsSync(filepath)) {
-            return fs.readFileSync(filepath).toString();
+const parseImports = (dir, filepath, updateSourcePath) => {
+    try {
+        const relativeFilePath = path.join(dir, filepath);
+        const relativeFileDir = path.dirname(relativeFilePath);
+
+        if (fs.existsSync(relativeFilePath)) {
+            const content = fs.readFileSync(relativeFilePath).toString();
+            const imports = helpers.getImportPaths(content);
+            imports.map(p => parseImports(relativeFileDir, p, !(p.startsWith('./') && filepath.startsWith('./'))));
+
+            let sourceUrl = helpers.removeRelativePathFromUrl(filepath);
+            if (updateSourcePath && filepath.startsWith('./')) {
+                sourceUrl = relativeFileDir.split(path.sep).pop() + '/' + sourceUrl;
+            }
+
+            if (sourceList.indexOf(sourceUrl) === -1) {
+                sourceList.push(sourceUrl);
+                input.sources[sourceUrl] = { content };
+            }
         }
     } catch(err) {
         throw new Error(`Import ${filepath} not found`);
     }
 };
 
-const findImports = pathName => {
-    try {
-        sourceList.push(pathName);
-        return { contents: getFileContent(pathName) };
-    } catch (e) {
-        return { error: e.message };
-    }
-};
+/* Parse all the import sources and add them to the `sourceList` */
 
-/* Dynamic linking is not supported. */
-
-const regex = new RegExp(/__\$\w+\$__/,'g');
-const address = '0000000000000000000000000000000000000000';
-
-const replaceLinkedLibs = byteCode => {
-    return byteCode.replace(regex, address);
-};
+import_paths.map(filepath => parseImports(solidity_file_dir, filepath, false));
 
 const getMythXReport = solidityCompiler => {
-    const compiled = JSON.parse(solidityCompiler.compile(JSON.stringify(input), findImports));
+    const compiled = JSON.parse(solidityCompiler.compile(JSON.stringify(input)));
 
     if (!compiled.contracts || !Object.keys(compiled.contracts).length) {
         if (compiled.errors) {
@@ -126,13 +131,11 @@ const getMythXReport = solidityCompiler => {
 
     /* Format data for MythX API */
 
-    // console.log(contract);
-
     const data = {
         contractName: contractName,
-        bytecode: replaceLinkedLibs(contract.evm.bytecode.object),
+        bytecode: helpers.replaceLinkedLibs(contract.evm.bytecode.object),
         sourceMap: contract.evm.deployedBytecode.sourceMap,
-        deployedBytecode: replaceLinkedLibs(contract.evm.deployedBytecode.object),
+        deployedBytecode: helpers.replaceLinkedLibs(contract.evm.deployedBytecode.object),
         deployedSourceMap: contract.evm.deployedBytecode.sourceMap,
         sourceList: sourceList,
         analysisMode: 'quick',
