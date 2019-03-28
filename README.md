@@ -5,7 +5,7 @@
 	<img src="/static/sabre_v2.jpg" width="100%"/>
 </p>
 
-Minimum viable [MythX](https://mythx.io) client. Compiles and analyzes a Solidity smart contract.
+Sabre is a minimum viable [MythX](https://mythx.io) client. It compiles and analyzes a Solidity smart contract using the MythX cloud service.
 
 ## Usage
 
