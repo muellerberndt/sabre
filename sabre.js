@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const ora = require('ora');
+const requireFromString = require('require-from-string');
 const helpers = require('./lib/helpers');
 const releases = require('./lib/releases');
 
@@ -178,22 +179,22 @@ const version = helpers.getSolidityVersion(solidity_code);
 /* If Solidity Contract has version specified, fetch the matching solc compiler */
 
 if (version !== releases.latest) {
-    /* Get the solc remote version snapshot of the specified version in the contract */
-
     const solcSpinner = ora({ text: `Compiling with solc v${version}`, color: 'yellow', spinner: 'bouncingBar' }).start();
 
-    solc.loadRemoteVersion(releases[version], function (err, solcSnapshot) {
-
-        if (err) {
-            solcSpinner.fail(`Downloading solc v${version} failed`);
-            console.log(chalk.red(err));
-        } else {
-            solcSpinner.succeed(`Downloaded solc v${version} successfully`);
+    try {
+        helpers.loadSolcVersion(releases[version], (solcString) => {
+            solcSpinner.succeed(`Compiled with solc v${version} successfully`);
 
             // NOTE: `solcSnapshot` has the same interface as `solc`
+            const solcSnapshot = solc.setupMethods(requireFromString(solcString), 'soljson-' + releases[version] + '.js');
+
             getMythXReport(solcSnapshot);
-        }
-    });
+        });
+    } catch (err) {
+        solcSpinner.fail(`Compilation with solc v${version} failed`);
+        console.log(chalk.red(err));
+    }
+
 } else {
     /* Use `solc`, if the specified version in the contract matches it's latest version */
 

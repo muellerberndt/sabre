@@ -5,3 +5,6 @@ config.js
 # IDE
 .idea
 .vscode
+
+# Ignore temp directory
+.temp
