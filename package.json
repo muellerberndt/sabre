@@ -1,6 +1,6 @@
 {
   "name": "sabre-mythx",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "A quick-and-dirty frontend for MythX",
   "main": "sabre.js",
   "repository": {
