@@ -19,7 +19,7 @@ let ethAddress = process.env.MYTHX_ETH_ADDRESS;
 let password = process.env.MYTHX_PASSWORD;
 
 const solidity_file = process.argv[2];
-let sourceList = [solidity_file];
+let sourceList = [];
 
 if (!(ethAddress && password)) {
     ethAddress = '0x0000000000000000000000000000000000000000';
@@ -92,6 +92,10 @@ const parseImports = (dir, filepath, updateSourcePath) => {
 /* Parse all the import sources and add them to the `sourceList` */
 
 import_paths.map(filepath => parseImports(solidity_file_dir, filepath, false));
+
+/* Add original solidity file to the last of the list */
+
+sourceList.push(solidity_file);
 
 const getMythXReport = solidityCompiler => {
     const compiled = JSON.parse(solidityCompiler.compile(JSON.stringify(input)));
