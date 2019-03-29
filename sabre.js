@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const ora = require('ora');
+const requireFromString = require('require-from-string');
 const helpers = require('./lib/helpers');
 const releases = require('./lib/releases');
 
@@ -18,7 +19,7 @@ let ethAddress = process.env.MYTHX_ETH_ADDRESS;
 let password = process.env.MYTHX_PASSWORD;
 
 const solidity_file = process.argv[2];
-let sourceList = [solidity_file];
+let sourceList = [];
 
 if (!(ethAddress && password)) {
     ethAddress = '0x0000000000000000000000000000000000000000';
@@ -91,6 +92,10 @@ const parseImports = (dir, filepath, updateSourcePath) => {
 /* Parse all the import sources and add them to the `sourceList` */
 
 import_paths.map(filepath => parseImports(solidity_file_dir, filepath, false));
+
+/* Add original solidity file to the last of the list */
+
+sourceList.push(solidity_file);
 
 const getMythXReport = solidityCompiler => {
     const compiled = JSON.parse(solidityCompiler.compile(JSON.stringify(input)));
@@ -178,22 +183,22 @@ const version = helpers.getSolidityVersion(solidity_code);
 /* If Solidity Contract has version specified, fetch the matching solc compiler */
 
 if (version !== releases.latest) {
-    /* Get the solc remote version snapshot of the specified version in the contract */
-
     const solcSpinner = ora({ text: `Compiling with solc v${version}`, color: 'yellow', spinner: 'bouncingBar' }).start();
 
-    solc.loadRemoteVersion(releases[version], function (err, solcSnapshot) {
-
-        if (err) {
-            solcSpinner.fail(`Downloading solc v${version} failed`);
-            console.log(chalk.red(err));
-        } else {
-            solcSpinner.succeed(`Downloaded solc v${version} successfully`);
+    try {
+        helpers.loadSolcVersion(releases[version], (solcString) => {
+            solcSpinner.succeed(`Compiled with solc v${version} successfully`);
 
             // NOTE: `solcSnapshot` has the same interface as `solc`
+            const solcSnapshot = solc.setupMethods(requireFromString(solcString), 'soljson-' + releases[version] + '.js');
+
             getMythXReport(solcSnapshot);
-        }
-    });
+        });
+    } catch (err) {
+        solcSpinner.fail(`Compilation with solc v${version} failed`);
+        console.log(chalk.red(err));
+    }
+
 } else {
     /* Use `solc`, if the specified version in the contract matches it's latest version */
 
