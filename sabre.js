@@ -183,7 +183,7 @@ const version = helpers.getSolidityVersion(solidity_code);
 /* If Solidity Contract has version specified, fetch the matching solc compiler */
 
 if (version !== releases.latest) {
-    const solcSpinner = ora({ text: `Compiling with solc v${version}`, color: 'yellow', spinner: 'bouncingBar' }).start();
+    const solcSpinner = ora({ text: `Downloading solc v${version}`, color: 'yellow', spinner: 'bouncingBar' }).start();
 
     try {
         helpers.loadSolcVersion(releases[version], (solcString) => {

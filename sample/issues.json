@@ -1,0 +1,64 @@
+{
+    "issues": [
+        {
+            "issues": [
+                {
+                    "swcID": "SWC-103",
+                    "swcTitle": "Floating Pragma",
+                    "description": {
+                        "head": "No pragma is set.",
+                        "tail": "It is recommended to make a conscious choice on what version of Solidity is used for compilation. Currently no version is set in the Solidity file."
+                    },
+                    "severity": "Medium",
+                    "locations": [
+                        {
+                            "sourceMap": "0:0:1"
+                        }
+                    ],
+                    "extra": {
+                        "testCase": {
+                            "initialState": {
+                                "accounts": null
+                            },
+                            "steps": null
+                        }
+                    }
+                },
+                {
+                    "swcID": "SWC-108",
+                    "swcTitle": "State Variable Default Visibility",
+                    "description": {
+                        "head": "The state variable visibility is not set.",
+                        "tail": "It is best practice to set the visibility of state variables explicitly. The default visibility for \"balances\" is internal. Other possible visibility values are public and private."
+                    },
+                    "severity": "Medium",
+                    "locations": [
+                        {
+                            "sourceMap": "47:8:1"
+                        }
+                    ],
+                    "extra": {
+                        "testCase": {
+                            "initialState": {
+                                "accounts": null
+                            },
+                            "steps": null
+                        }
+                    }
+                }
+            ],
+            "sourceType": "solidity-file",
+            "sourceFormat": "text",
+            "sourceList": [
+                "token.sol",
+                "/token.sol"
+            ],
+            "meta": {
+                "coveredInstructions": 291,
+                "coveredPaths": 10,
+                "selectedCompiler": "0.4.25"
+            }
+        }
+    ],
+    "uuid": "73fe877c-a2ea-4d12-bec2-9210c1ba86c2"
+}
