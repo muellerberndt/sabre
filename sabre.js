@@ -18,7 +18,9 @@ if (process.argv.length != 3) {
 let ethAddress = process.env.MYTHX_ETH_ADDRESS;
 let password = process.env.MYTHX_PASSWORD;
 
-const solidity_file = process.argv[2];
+const solidity_file_path = process.argv[2];
+const solidity_file_name = path.basename(solidity_file_path);
+
 let sourceList = [];
 
 if (!(ethAddress && password)) {
@@ -29,7 +31,7 @@ if (!(ethAddress && password)) {
 let solidity_code;
 
 try {
-    solidity_code = fs.readFileSync(solidity_file, 'utf8');
+    solidity_code = fs.readFileSync(solidity_file_path, 'utf8');
 } catch (err) {
     console.log('Error opening input file' + err.message);
     process.exit(-1);
@@ -55,7 +57,7 @@ const input = {
     }
 };
 
-const solidity_file_dir = path.dirname(solidity_file);
+const solidity_file_dir = path.dirname(solidity_file_path);
 const import_paths = helpers.getImportPaths(solidity_code);
 
 /*
@@ -95,7 +97,7 @@ import_paths.map(filepath => parseImports(solidity_file_dir, filepath, false));
 
 /* Add original solidity file to the last of the list */
 
-sourceList.push(solidity_file);
+sourceList.push(solidity_file_name);
 
 const getMythXReport = solidityCompiler => {
     const compiled = JSON.parse(solidityCompiler.compile(JSON.stringify(input)));
@@ -137,7 +139,7 @@ const getMythXReport = solidityCompiler => {
     /* Format data for MythX API */
 
     const data = {
-        contractName: contractName,
+        contractName,
         bytecode: helpers.replaceLinkedLibs(contract.evm.bytecode.object),
         sourceMap: contract.evm.deployedBytecode.sourceMap,
         deployedBytecode: helpers.replaceLinkedLibs(contract.evm.deployedBytecode.object),
@@ -147,14 +149,14 @@ const getMythXReport = solidityCompiler => {
         sources: {}
     };
 
-    data.sources[solidity_file] = { source: solidity_code };
+    data.sources[solidity_file_name] = { source: solidity_code };
 
     /* Instantiate MythX Client */
 
     const client = new armlet.Client(
         {
-            ethAddress: ethAddress,
-            password: password,
+            ethAddress,
+            password,
         }
     );
 
@@ -164,6 +166,9 @@ const getMythXReport = solidityCompiler => {
         .then(result => {
             // Stop the spinner and clear from the terminal
             mythxSpinner.stop();
+
+            // const { inspect } = require('util');
+            // console.log(inspect(result, false, null, true));
 
             const { issues } = result;
             helpers.doReport(data, issues);
