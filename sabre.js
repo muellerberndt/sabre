@@ -167,6 +167,9 @@ const getMythXReport = solidityCompiler => {
             // Stop the spinner and clear from the terminal
             mythxSpinner.stop();
 
+            /* Add `solidity_file_path` to display the result in the ESLint format with the provided input path */
+            data.filePath = solidity_file_path;
+
             // const { inspect } = require('util');
             // console.log(inspect(result, false, null, true));
 
