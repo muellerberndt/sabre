@@ -121,7 +121,11 @@ const getMythXReport = solidityCompiler => {
         contractName = Object.keys(inputfile)[0];
         contract = inputfile[contractName];
     } else {
-        /* Get the contract with largest bytecode object to generate MythX analysis report */
+    
+        /* 
+         * Get the contract with largest bytecode object to generate MythX analysis report.
+         * If inheritance is used, the main contract is the largest as it containts the bytecode of all others. 
+        */
 
         let bytecodes = {};
 
@@ -169,9 +173,6 @@ const getMythXReport = solidityCompiler => {
 
             /* Add `solidity_file_path` to display the result in the ESLint format with the provided input path */
             data.filePath = solidity_file_path;
-
-            // const { inspect } = require('util');
-            // console.log(inspect(result, false, null, true));
 
             const { issues } = result;
             helpers.doReport(data, issues);
