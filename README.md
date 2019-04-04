@@ -24,10 +24,14 @@ export MYTHX_ETH_ADDRESS=0x(...)
 export MYTHX_PASSWORD=password
 ```
 
-### Running an Analysis
+### Usage
 
 ```
-$ sabre sample/token.sol
+$ sabre [options] <solidity_file>
+
+OPTIONS:
+    --clientToolName <string>   Override clientToolName
+    --noCacheLookup             Deactivate MythX cache lookup
 ```
 
 This analysis should take about 60 to 90 seconds to finish.
