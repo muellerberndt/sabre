@@ -10,16 +10,33 @@ const requireFromString = require('require-from-string');
 const helpers = require('./lib/helpers');
 const releases = require('./lib/releases');
 
-if (process.argv.length != 3) {
-    console.log('Usage: ' + __filename + ' <solidity_file>');
-    process.exit(-1);
-}
-
 let ethAddress = process.env.MYTHX_ETH_ADDRESS;
 let password = process.env.MYTHX_PASSWORD;
 
-const solidity_file_path = process.argv[2];
+const args = require('minimist')(process.argv.slice(2));
+
+const helpText = `
+Minimum viable CLI for ther MythX security analysis platform.
+
+USAGE:
+
+$ sabre [options] <solidity_file>'
+
+OPTIONS:
+    --clientToolName <string>   Override clientToolName
+    --noCacheLookup             Deactivate MythX cache lookup
+`;
+
+if (!args._.length) {
+    console.log(helpText);
+    process.exit(-1);
+}
+
+const solidity_file_path = args._[0];
 const solidity_file_name = path.basename(solidity_file_path);
+
+const clientToolName = args.clientToolName || 'sabre';
+const noCacheLookup = args.noCacheLookup || false;
 
 let sourceList = [];
 
@@ -166,7 +183,7 @@ const getMythXReport = solidityCompiler => {
 
     const mythxSpinner = ora({ text: 'Analyzing ' + contractName, color: 'yellow', spinner: 'bouncingBar' }).start();
 
-    client.analyzeWithStatus({ data, timeout: 300000, clientToolName: 'sabre' })
+    client.analyzeWithStatus({ data, timeout: 300000, clientToolName: clientToolName, noCacheLookup: noCacheLookup})
         .then(result => {
             // Stop the spinner and clear from the terminal
             mythxSpinner.stop();
