@@ -15,12 +15,11 @@ let password = process.env.MYTHX_PASSWORD;
 
 const args = require('minimist')(process.argv.slice(2));
 
-const helpText = `
-Minimum viable CLI for ther MythX security analysis platform.
+const helpText = `Minimum viable CLI for the MythX security analysis platform.
 
 USAGE:
 
-$ sabre [options] <solidity_file>'
+$ sabre [options] <solidity_file>
 
 OPTIONS:
     --clientToolName <string>   Override clientToolName
