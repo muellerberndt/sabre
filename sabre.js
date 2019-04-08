@@ -188,6 +188,9 @@ const getMythXReport = solidityCompiler => {
             // Stop the spinner and clear from the terminal
             mythxSpinner.stop();
 
+            /* Add `solidity_file_path` to display the result in the ESLint format with the provided input path */
+            data.filePath = solidity_file_path;
+
             /* Add all the imported contracts source code to the `data` to sourcemap the issue location */
             data.sources = { [solidity_file_name]: { content: solidity_code }, ...input.sources };
 
