@@ -63,7 +63,8 @@ const input = {
     settings: {
         outputSelection: {
             '*': {
-                '*': ['*']
+                '*': ['*'],
+                '': ['ast']
             }
         },
         optimizer: {
@@ -137,10 +138,10 @@ const getMythXReport = solidityCompiler => {
         contractName = Object.keys(inputfile)[0];
         contract = inputfile[contractName];
     } else {
-    
-        /* 
+
+        /*
          * Get the contract with largest bytecode object to generate MythX analysis report.
-         * If inheritance is used, the main contract is the largest as it containts the bytecode of all others. 
+         * If inheritance is used, the main contract is the largest as it contains the bytecode of all others.
         */
 
         let bytecodes = {};
@@ -169,7 +170,7 @@ const getMythXReport = solidityCompiler => {
         sources: {}
     };
 
-    data.sources[solidity_file_name] = { source: solidity_code };
+    data.sources[solidity_file_name] = { source: solidity_code, ast: compiled.sources.inputfile.ast };
 
     /* Instantiate MythX Client */
 
@@ -189,6 +190,9 @@ const getMythXReport = solidityCompiler => {
 
             /* Add `solidity_file_path` to display the result in the ESLint format with the provided input path */
             data.filePath = solidity_file_path;
+
+            /* Add all the imported contracts source code to the `data` to sourcemap the issue location */
+            data.sources = { [solidity_file_name]: { content: solidity_code }, ...input.sources };
 
             const { issues } = result;
             helpers.doReport(data, issues);
