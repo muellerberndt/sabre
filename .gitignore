@@ -8,3 +8,4 @@ config.js
 
 # Ignore temp directory
 .temp
+package-lock.json

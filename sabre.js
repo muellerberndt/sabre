@@ -24,6 +24,8 @@ $ sabre [options] <solidity_file>
 OPTIONS:
     --clientToolName <string>   Override clientToolName
     --noCacheLookup             Deactivate MythX cache lookup
+    --sendSourceCode            Send source code instead of AST 
+    --debug                     Print full MythX request and response 
 `;
 
 if (!args._.length) {
@@ -36,6 +38,8 @@ const solidity_file_name = path.basename(solidity_file_path);
 
 const clientToolName = args.clientToolName || 'sabre';
 const noCacheLookup = args.noCacheLookup || false;
+const debug = args.debug || false;
+const sendSourceCode = args.sendSourceCode || false;
 
 let sourceList = [];
 
@@ -170,7 +174,21 @@ const getMythXReport = solidityCompiler => {
         sources: {}
     };
 
-    data.sources[solidity_file_name] = { source: solidity_code, ast: compiled.sources.inputfile.ast };
+    if (sendSourceCode){
+        data.mainSource = solidity_file_path;
+        data.sources[solidity_file_name] = { source: solidity_code };
+    } else {
+        data.sources[solidity_file_name] = { ast: compiled.sources.inputfile.ast };
+    }
+
+
+
+
+    if (debug){
+        console.log("-------------------");
+        console.log("MythX Request Body:\n");
+        console.log(data);
+    }
 
     /* Instantiate MythX Client */
 
@@ -194,6 +212,13 @@ const getMythXReport = solidityCompiler => {
             /* Add all the imported contracts source code to the `data` to sourcemap the issue location */
             data.sources = { [solidity_file_name]: { content: solidity_code }, ...input.sources };
 
+            if (debug){
+                console.log("-------------------");
+                console.log("MythX Response Body:\n");
+                console.log( JSON.stringify(result, null, 4));
+                console.log("-------------------");
+            }
+     
             const { issues } = result;
             helpers.doReport(data, issues);
         })
