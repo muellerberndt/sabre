@@ -14,7 +14,8 @@ let ethAddress = process.env.MYTHX_ETH_ADDRESS;
 let password = process.env.MYTHX_PASSWORD;
 
 const args = require('minimist')(process.argv.slice(2), {
-    boolean: [ 'noCacheLookup' ]
+    boolean: [ 'noCacheLookup', 'debug', 'sendSourceCode' ],
+    default: { mode: 'quick' },
 });
 
 const helpText = `Minimum viable CLI for the MythX security analysis platform.
@@ -24,12 +25,20 @@ USAGE:
 $ sabre [options] <solidity_file>
 
 OPTIONS:
-    --clientToolName <string>       Override clientToolName
-    --noCacheLookup                 Deactivate MythX cache lookup
+    --mode <quick/full>             Analysis mode (default=quick)
+    --clientToolName <string>       Override clientToolNames
+    --noCacheLookup                 Deactivate MythX cache lookups
+    --sendSourceCode                Send source code instead of AST
+    --debug                         Print MythX API request and response
 `;
 
 if (!args._.length) {
     console.log(helpText);
+    process.exit(-1);
+}
+
+if (!['quick', 'full'].includes(args.mode)) {
+    console.log('Invalid analysis mode. Please use either "quick" or "full".');
     process.exit(-1);
 }
 
@@ -169,7 +178,21 @@ const getMythXReport = solidityCompiler => {
         sources: {}
     };
 
-    data.sources[solidity_file_name] = { source: solidity_code, ast: compiled.sources.inputfile.ast };
+    if (args.sendSourceCode){
+        data.mainSource = solidity_file_path;
+        data.sources[solidity_file_name] = { source: solidity_code };
+    } else {
+        data.sources[solidity_file_name] = { ast: compiled.sources.inputfile.ast };
+    }
+
+
+
+
+    if (args.debug){
+        console.log("-------------------");
+        console.log("MythX Request Body:\n");
+        console.log(data);
+    }
 
     /* Instantiate MythX Client */
 
@@ -182,7 +205,7 @@ const getMythXReport = solidityCompiler => {
 
     const mythxSpinner = ora({ text: 'Analyzing ' + contractName, color: 'yellow', spinner: 'bouncingBar' }).start();
 
-    client.analyzeWithStatus({ data, timeout: 300000, clientToolName: args.clientToolName || 'sabre', noCacheLookup: args.noCacheLookup})
+    client.analyzeWithStatus({ data, timeout: 300000, analysisMode: args.mode, clientToolName: args.clientToolName || 'sabre', noCacheLookup: args.noCacheLookup})
         .then(result => {
             // Stop the spinner and clear from the terminal
             mythxSpinner.stop();
@@ -193,6 +216,13 @@ const getMythXReport = solidityCompiler => {
             /* Add all the imported contracts source code to the `data` to sourcemap the issue location */
             data.sources = { [solidity_file_name]: { content: solidity_code }, ...input.sources };
 
+            if (args.debug){
+                console.log("-------------------");
+                console.log("MythX Response Body:\n");
+                console.log( JSON.stringify(result, null, 4));
+                console.log("-------------------");
+            }
+     
             const { issues } = result;
             helpers.doReport(data, issues);
         })
