@@ -118,11 +118,11 @@ const parseImports = (dir, filepath, updateSourcePath) => {
 
 /* Parse all the import sources and add them to the `sourceList` */
 
-import_paths.map(filepath => parseImports(solidity_file_dir, filepath, false));
+import_paths.map(filepath => parseImports(solidity_file_path, filepath, false));
 
 /* Add original solidity file to the last of the list */
 
-sourceList.push(solidity_file_name);
+sourceList.push(solidity_file_path);
 
 const getMythXReport = solidityCompiler => {
     const compiled = JSON.parse(solidityCompiler.compile(JSON.stringify(input)));
@@ -179,14 +179,11 @@ const getMythXReport = solidityCompiler => {
     };
 
     if (args.sendSourceCode){
-        data.mainSource = solidity_file_path;
+        data.mainSource = solidity_file_name;
         data.sources[solidity_file_name] = { source: solidity_code };
     } else {
         data.sources[solidity_file_name] = { ast: compiled.sources.inputfile.ast };
     }
-
-
-
 
     if (args.debug){
         console.log("-------------------");
