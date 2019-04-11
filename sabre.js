@@ -186,8 +186,8 @@ const getMythXReport = solidityCompiler => {
     }
 
     if (args.debug){
-        console.log("-------------------");
-        console.log("MythX Request Body:\n");
+        console.log('-------------------');
+        console.log('MythX Request Body:\n');
         console.log(data);
     }
 
@@ -214,10 +214,10 @@ const getMythXReport = solidityCompiler => {
             data.sources = { [solidity_file_name]: { content: solidity_code }, ...input.sources };
 
             if (args.debug){
-                console.log("-------------------");
-                console.log("MythX Response Body:\n");
+                console.log('-------------------');
+                console.log'"MythX Response Body:\n');
                 console.log( JSON.stringify(result, null, 4));
-                console.log("-------------------");
+                console.log('-------------------');
             }
      
             const { issues } = result;
