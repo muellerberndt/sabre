@@ -215,7 +215,7 @@ const getMythXReport = solidityCompiler => {
 
             if (args.debug){
                 console.log('-------------------');
-                console.log'"MythX Response Body:\n');
+                console.log('MythX Response Body:\n');
                 console.log( JSON.stringify(result, null, 4));
                 console.log('-------------------');
             }
