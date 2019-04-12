@@ -15,7 +15,7 @@ let ethAddress = process.env.MYTHX_ETH_ADDRESS;
 let password = process.env.MYTHX_PASSWORD;
 
 const args = require('minimist')(process.argv.slice(2), {
-    boolean: [ 'noCacheLookup', 'debug' ],
+    boolean: [ 'noCacheLookup', 'debug', 'sendAST' ],
     default: { mode: 'quick' },
 });
 
@@ -29,6 +29,7 @@ OPTIONS:
     --mode <quick/full>             Analysis mode (default=quick)
     --clientToolName <string>       Override clientToolNames
     --noCacheLookup                 Deactivate MythX cache lookups
+    --sendAST                       Submit AST instead of source code
     --debug                         Print MythX API request and response
 `;
 
@@ -178,10 +179,11 @@ const getMythXReport = solidityCompiler => {
         sources: {}
     };
 
-    data.sources[solidity_file_name] = { 
-        AST: compiled.sources.inputfile.ast,
-        source: solidity_code
-    };
+    if (args.sendAST) {
+        data.sources[solidity_file_name] = { ast: compiled.sources.inputfile.ast };
+    } else {
+        data.sources[solidity_file_name] = { source: solidity_code };
+    }
 
     data.mainSource = solidity_file_name;
     
@@ -216,7 +218,7 @@ const getMythXReport = solidityCompiler => {
             if (args.debug){
                 console.log('-------------------');
                 console.log('MythX Response Body:\n');
-                console.log(util.inspect(result, false, null, true /* enable colors */));
+                console.log(util.inspect(result, {showHidden: false, depth: null}));
                 console.log('-------------------');
             }
      
