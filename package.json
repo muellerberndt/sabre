@@ -20,14 +20,14 @@
   "author": "Bernhard Mueller",
   "license": "MIT",
   "dependencies": {
-    "armlet": "^2.3.0",
+    "armlet": "^2.4.0",
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.15.3",
+    "eslint": "^5.16.0",
     "minimist": "^1.2.0",
     "openzeppelin-solidity": "^2.2.0",
-    "ora": "^3.2.0",
+    "ora": "^3.4.0",
     "package.json": "^2.0.1",
-    "remix-lib": "^0.4.1",
+    "remix-lib": "^0.4.3",
     "solc": "^0.5.7",
     "solidity-parser-antlr": "^0.4.2"
   },
