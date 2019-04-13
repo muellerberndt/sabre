@@ -28,7 +28,6 @@
     "ora": "^3.4.0",
     "package.json": "^2.0.1",
     "remix-lib": "^0.4.3",
-    "solc": "^0.5.7",
     "solidity-parser-antlr": "^0.4.2"
   },
   "bin": {

@@ -237,27 +237,18 @@ const getMythXReport = solidityCompiler => {
 
 const version = helpers.getSolidityVersion(solidity_code);
 
-/* If Solidity Contract has version specified, fetch the matching solc compiler */
+const solcSpinner = ora({ text: `Downloading solc v${version}`, color: 'yellow', spinner: 'bouncingBar' }).start();
 
-if (version !== releases.latest) {
-    const solcSpinner = ora({ text: `Downloading solc v${version}`, color: 'yellow', spinner: 'bouncingBar' }).start();
+try {
+    helpers.loadSolcVersion(releases[version], (solcString) => {
+        solcSpinner.succeed(`Compiled with solc v${version} successfully`);
 
-    try {
-        helpers.loadSolcVersion(releases[version], (solcString) => {
-            solcSpinner.succeed(`Compiled with solc v${version} successfully`);
+        // NOTE: `solcSnapshot` has the same interface as `solc`
+        const solcSnapshot = solc.setupMethods(requireFromString(solcString), 'soljson-' + releases[version] + '.js');
 
-            // NOTE: `solcSnapshot` has the same interface as `solc`
-            const solcSnapshot = solc.setupMethods(requireFromString(solcString), 'soljson-' + releases[version] + '.js');
-
-            getMythXReport(solcSnapshot);
-        });
-    } catch (err) {
-        solcSpinner.fail(`Compilation with solc v${version} failed`);
-        console.log(chalk.red(err));
-    }
-
-} else {
-    /* Use `solc`, if the specified version in the contract matches it's latest version */
-
-    getMythXReport(solc);
+        getMythXReport(solcSnapshot);
+    });
+} catch (err) {
+    solcSpinner.fail(`Compilation with solc v${version} failed`);
+    console.log(chalk.red(err));
 }
