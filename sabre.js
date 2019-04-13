@@ -123,7 +123,7 @@ import_paths.map(filepath => parseImports(solidity_file_dir, filepath, false));
 
 /* Add original solidity file to the last of the list */
 
-sourceList.push(solidity_file_path);
+sourceList.push(solidity_file_name);
 
 const getMythXReport = solidityCompiler => {
     const compiled = JSON.parse(solidityCompiler.compile(JSON.stringify(input)));
