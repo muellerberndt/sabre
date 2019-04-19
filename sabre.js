@@ -65,7 +65,7 @@ try {
 const input = {
     language: 'Solidity',
     sources: {
-        inputfile: {
+        [solidity_file_name]: {
             content: solidity_code
         }
     },
@@ -137,7 +137,7 @@ const getMythXReport = solidityCompiler => {
         process.exit(-1);
     }
 
-    let { inputfile } = compiled.contracts;
+    let inputfile = compiled.contracts[solidity_file_name];
     let contract, contractName;
 
     if (inputfile.length === 0) {
@@ -180,14 +180,18 @@ const getMythXReport = solidityCompiler => {
     };
 
     if (args.sendAST) {
-        data.sources[solidity_file_name] = { ast: compiled.sources.inputfile.ast };
+        for (const key in compiled.sources) {
+            data.sources[key] = { ast: compiled.sources[key].ast };
+        }
     } else {
-        data.sources[solidity_file_name] = { source: solidity_code };
+        for (const key in input.sources) {
+            data.sources[key] = { source: input.sources[key].content };
+        }
     }
 
     data.mainSource = solidity_file_name;
-    
-    if (args.debug){
+
+    if (args.debug) {
         console.log('-------------------');
         console.log('MythX Request Body:\n');
         console.log(util.inspect(data, false, null, true /* enable colors */));
@@ -213,7 +217,7 @@ const getMythXReport = solidityCompiler => {
             data.filePath = solidity_file_path;
 
             /* Add all the imported contracts source code to the `data` to sourcemap the issue location */
-            data.sources = { [solidity_file_name]: { content: solidity_code }, ...input.sources };
+            data.sources = { ...input.sources };
 
             if (args.debug){
                 console.log('-------------------');
