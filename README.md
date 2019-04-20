@@ -42,7 +42,8 @@ MythX tool builders will earn revenue share in Dai when we go live with paid sub
 
 **Some links:**
 
-- [MythX documentation](https://docs.mythx.io/en/latest/)
-- [Awesome MythX Smart Contract Security](https://github.com/b-mueller/awesome-mythx-smart-contract-security)
-- [The tech behind MythX smart contract security analysis](https://medium.com/consensys-diligence/the-tech-behind-mythx-smart-contract-security-analysis-32c849aedaef)
-- [Detecting the top 4 critical Ethereum smart contract vulnerabilities with MythX](https://medium.com/consensys-diligence/detecting-the-top-4-critical-smart-contract-vulnerabilities-with-mythx-9c568d7db7a6?)
+- [MythX Documentation](https://docs.mythx.io/en/latest/)
+- [Awesome MythX Tools](https://github.com/b-mueller/awesome-mythx-smart-contract-security)
+- [The Tech Behind MythX Smart Contract Security Analysis](https://medium.com/consensys-diligence/the-tech-behind-mythx-smart-contract-security-analysis-32c849aedaef)
+- [A Deep Dive into the MythX API](https://medium.com/@muellerberndt/a-deep-dive-into-the-mythx-smart-contract-security-analysis-api-3c2cd8e6a338)
+- [Detecting the Top 4 Critical Smart Contract Vulnerabilities With MythX](https://medium.com/consensys-diligence/detecting-the-top-4-critical-smart-contract-vulnerabilities-with-mythx-9c568d7db7a6?)
