@@ -166,6 +166,13 @@ const getMythXReport = solidityCompiler => {
         contract = inputfile[contractName];
     }
 
+    /* Bytecode would be empty if contract is only an interface */
+
+    if (!contract.evm.bytecode.object) {
+        console.log(chalk.red('✖ Compiling the Solidity code did not return any bytecode. Note that abstract contracts cannot be analyzed.'));
+        process.exit(-1);
+    }
+
     /* Format data for MythX API */
 
     const data = {
@@ -225,7 +232,7 @@ const getMythXReport = solidityCompiler => {
                 console.log(util.inspect(result, {showHidden: false, depth: null}));
                 console.log('-------------------');
             }
-     
+
             const { issues } = result;
             helpers.doReport(data, issues);
         })
