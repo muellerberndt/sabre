@@ -8,4 +8,8 @@ config.js
 
 # Ignore temp directory
 .temp
+
+# nyc
+.nyc_output
+
 package-lock.json
