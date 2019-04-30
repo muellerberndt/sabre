@@ -20,24 +20,30 @@
   "author": "Bernhard Mueller",
   "license": "MIT",
   "dependencies": {
-    "armlet": "^2.4.0",
+    "armlet": "^2.5.1",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
     "minimist": "^1.2.0",
     "openzeppelin-solidity": "^2.2.0",
     "ora": "^3.4.0",
     "package.json": "^2.0.1",
-    "remix-lib": "^0.4.3",
+    "remix-lib": "^0.4.5",
     "solidity-parser-antlr": "^0.4.2"
   },
   "bin": {
     "sabre": "./sabre.js"
   },
   "scripts": {
-    "lint": "eslint ./sabre.js ./lib",
-    "lint:fix": "eslint --fix ./sabre.js ./lib"
+    "lint": "eslint ./sabre.js ./lib ./test",
+    "lint:fix": "eslint --fix ./sabre.js ./lib ./test",
+    "test": "nyc mocha"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "nyc": "^14.0.0"
   }
 }

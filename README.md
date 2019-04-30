@@ -30,11 +30,26 @@ export MYTHX_PASSWORD=password
 $ sabre [options] <solidity_file>
 
 OPTIONS:
-    --clientToolName <string>   Override clientToolName
-    --noCacheLookup             Deactivate MythX cache lookup
+    --mode <quick/full>             Analysis mode (default=quick)
+    --clientToolName <string>       Override clientToolNames
+    --noCacheLookup                 Deactivate MythX cache lookups
+    --sendAST                       Submit AST instead of source code
+    --debug                         Print MythX API request and response
 ```
 
 This analysis should take about 60 to 90 seconds to finish.
+
+### Example
+```
+$ sabre contracts/token.sol
+  ✔ Compiled with solc v0.5.7 successfully
+  
+  token.sol
+    13:4  error  The binary subtraction can underflow  https://smartcontractsecurity.github.io/SWC-registry/docs/SWC-101
+    14:4  error  The binary addition can overflow      https://smartcontractsecurity.github.io/SWC-registry/docs/SWC-101
+  
+  ✖ 2 problems (2 errors, 0 warnings)
+```
 
 ## Writing your own MythX Tools
 
