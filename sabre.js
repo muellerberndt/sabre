@@ -31,6 +31,7 @@ OPTIONS:
     --noCacheLookup                 Deactivate MythX cache lookups
     --sendAST                       Submit AST instead of source code
     --debug                         Print MythX API request and response
+    --rootdir <absolute_path>       Root directory for import lookups (experimental)
 `;
 
 if (!args._.length) {
@@ -83,7 +84,7 @@ const input = {
     }
 };
 
-const solidity_file_dir = path.dirname(solidity_file_path);
+const solidity_file_dir = args.rootdir? args.rootdir:path.dirname(solidity_file_path);
 const import_paths = helpers.getImportPaths(solidity_code);
 
 /*
@@ -100,7 +101,7 @@ const parseImports = (dir, filepath, updateSourcePath) => {
         if (fs.existsSync(relativeFilePath)) {
             const content = fs.readFileSync(relativeFilePath).toString();
             const imports = helpers.getImportPaths(content);
-            imports.map(p => parseImports(relativeFileDir, p, !(p.startsWith('./') && filepath.startsWith('./'))));
+            imports.map(p => parseImports(args.rootdir?args.rootdir:relativeFileDir, p, !(p.startsWith('./') && filepath.startsWith('./'))));
 
             let sourceUrl = helpers.removeRelativePathFromUrl(filepath);
             if (updateSourcePath && filepath.startsWith('./')) {
