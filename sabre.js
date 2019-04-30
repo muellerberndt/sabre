@@ -71,27 +71,9 @@ const { sources, sourceList } = compiler.parseImports(solidity_code, solidity_fi
 
 sourceList.push(solidity_file_name);
 
-const input = {
-    language: 'Solidity',
-    sources: {
-        [solidity_file_name]: {
-            content: solidity_code
-        },
-        ...sources
-    },
-    settings: {
-        outputSelection: {
-            '*': {
-                '*': ['*'],
-                '': ['ast']
-            }
-        },
-        optimizer: {
-            enabled: true,
-            runs: 200
-        }
-    }
-};
+/* Get the input config for the Solidity Compiler */
+
+const input = compiler.getSolcInput(solidity_file_name, solidity_code, sources);
 
 /* Get the version of the Solidity Compiler */
 
@@ -136,9 +118,6 @@ try {
                 // Stop the spinner and clear from the terminal
                 mythxSpinner.stop();
 
-                /* Add `solidity_file_path` to display the result in the ESLint format with the provided input path */
-                data.filePath = solidity_file_path;
-
                 /* Add all the imported contracts source code to the `data` to sourcemap the issue location */
                 data.sources = { ...input.sources };
 
@@ -150,7 +129,14 @@ try {
                 }
 
                 const { issues } = result;
-                report.formatIssues(data, issues);
+                const uniqueIssues = report.formatIssues(data, issues);
+
+                if (uniqueIssues.length === 0) {
+                    console.log(chalk.green('✔ No errors/warnings found in ' + solidity_file_path));
+                } else {
+                    const formatter = report.getFormatter();
+                    console.log(formatter(uniqueIssues));
+                }
             })
             .catch(err => {
                 // Stop the spinner and clear from the terminal
