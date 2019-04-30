@@ -3,11 +3,15 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2
-jobs:
-    build:
-        docker:
-            - image: circleci/node:lts
 
+defaults: &defaults
+    working_directory: ~/sabre
+    docker:
+        - image: circleci/node:lts
+
+jobs:
+    test:
+        <<: *defaults
         steps:
             - checkout
 
@@ -19,11 +23,44 @@ jobs:
                       - v1-dependencies-
 
             - run: npm install
+            - run:
+                  name: Run tests
+                  command: npm test
 
             - save_cache:
                   paths:
                       - node_modules
                   key: v1-dependencies-{{ checksum "package.json" }}
 
-            # run tests!
-            - run: npm test
+            - persist_to_workspace:
+                  root: ~/sabre
+                  paths: .
+
+    deploy:
+        <<: *defaults
+        steps:
+            - attach_workspace:
+                  at: ~/sabre
+            - run:
+                  name: Authenticate with registry
+                  command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
+            - run:
+                  name: Publish package
+                  command: npm publish
+
+workflows:
+    version: 2
+    test-deploy:
+        jobs:
+            - test:
+                  filters:
+                      tags:
+                          only: /^v.*/
+            - deploy:
+                  requires:
+                      - test
+                  filters:
+                      tags:
+                          only: /^v.*/
+                      branches:
+                          ignore: /.*/
