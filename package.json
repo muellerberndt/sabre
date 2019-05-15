@@ -20,15 +20,18 @@
   "author": "Bernhard Mueller",
   "license": "MIT",
   "dependencies": {
-    "armlet": "^2.5.1",
+    "armlet": "^2.6.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
     "minimist": "^1.2.0",
     "openzeppelin-solidity": "^2.2.0",
     "ora": "^3.4.0",
     "package.json": "^2.0.1",
-    "remix-lib": "^0.4.5",
-    "solidity-parser-antlr": "^0.4.2"
+    "remix-lib": "^0.4.6",
+    "solidity-parser-antlr": "^0.4.2",
+    "truffle-compile": "^4.0.14",
+    "truffle-contract": "^4.0.15",
+    "truffle-resolver": "^5.0.13"
   },
   "bin": {
     "sabre": "./sabre.js"
@@ -44,6 +47,6 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
-    "nyc": "^14.0.0"
+    "nyc": "^14.1.1"
   }
 }
