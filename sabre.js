@@ -104,7 +104,7 @@ try {
                 try {
                     compiledData = compiler.getCompiledContracts(input, solcSnapshot, solidity_file_path);
                 } catch (e) {
-                    console.log(e.message);
+                    console.log(chalk.red(e.message));
                     process.exit(1);
                 }
 
