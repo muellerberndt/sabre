@@ -1,5 +1,5 @@
 {
-  "elapsed": 11956,
+  "elapsed": 56191,
   "issues": [
     {
       "issues": [
@@ -59,14 +59,14 @@
         "logs": [
           {
             "level": "error",
-            "msg": "Maru:Error: Cannot find module 'solc@0.4.25'"
+            "msg": "Maru:Error: Unable to detect main source to compile"
           },
           {
             "level": "error",
             "msg": "Maru:Error: Errors returned by the Solidity compiler. Check your code for syntax errors and that you have submitted all imports."
           }
         ],
-        "selectedCompiler": "0.4.25"
+        "selectedCompiler": "Unknown"
       }
     }
   ],
@@ -76,11 +76,11 @@
     "maestroVersion": "1.2.10",
     "maruVersion": "0.4.4",
     "mythrilVersion": "0.20.4",
-    "queueTime": 1780,
-    "runTime": -1780,
+    "queueTime": 3500,
+    "runTime": 42400,
     "status": "Finished",
-    "submittedAt": "2019-04-30T13:19:34.022Z",
+    "submittedAt": "2019-05-15T13:06:05.016Z",
     "submittedBy": "5c6f94cb06d17300110e3ce9",
-    "uuid": "b91596e7-bb47-4903-9efa-32c67a1b39be"
+    "uuid": "b0ecf018-cdd1-4593-a6c0-a4f1d005e128"
   }
 }

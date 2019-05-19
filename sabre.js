@@ -6,6 +6,8 @@ const path = require('path');
 const chalk = require('chalk');
 const ora = require('ora');
 const requireFromString = require('require-from-string');
+const Profiler = require('truffle-compile/profiler');
+const Resolver = require('truffle-resolver');
 const client = require('./lib/client');
 const compiler = require('./lib/compiler');
 const report = require('./lib/report');
@@ -44,8 +46,10 @@ if (!['quick', 'full'].includes(args.mode)) {
     process.exit(-1);
 }
 
-const solidity_file_path = args._[0];
+const working_directory = process.cwd();
+const solidity_file_path = path.resolve(working_directory, args._[0]);
 const solidity_file_name = path.basename(solidity_file_path);
+const contracts_build_directory = path.dirname(solidity_file_path);
 
 if (!(ethAddress && password)) {
     ethAddress = '0x0000000000000000000000000000000000000000';
@@ -61,19 +65,12 @@ try {
     process.exit(-1);
 }
 
-const solidity_file_dir = path.dirname(solidity_file_path);
+const resolver = new Resolver({
+    working_directory,
+    contracts_build_directory,
+});
 
-/* Parse all the import sources and add them to the `sourceList` */
-
-const { sources, sourceList } = compiler.parseImports(solidity_code, solidity_file_dir);
-
-/* Add original solidity file to the last of the list */
-
-sourceList.push(solidity_file_name);
-
-/* Get the input config for the Solidity Compiler */
-
-const input = compiler.getSolcInput(solidity_file_name, solidity_code, sources);
+const allSources = {};
 
 /* Get the version of the Solidity Compiler */
 
@@ -88,64 +85,83 @@ try {
         // NOTE: `solcSnapshot` has the same interface as `solc`
         const solcSnapshot = solc.setupMethods(requireFromString(solcString), 'soljson-' + releases[version] + '.js');
 
-        let compiledData;
+        /* Parse all the import sources and the `sourceList` */
 
-        try {
-            compiledData = compiler.getCompiledContracts(input, solcSnapshot, solidity_file_name);
-        } catch (e) {
-            console.log(chalk.red(e.message));
-            process.exit(1);
-        }
+        Profiler.resolveAllSources(resolver, [solidity_file_path], solcSnapshot)
+            .then(resolved => {
+                const sourceList = Object.keys(resolved);
 
-        const data = client.getRequestData(
-            input,
-            compiledData,
-            sourceList,
-            solidity_file_name,
-            args.sendAST
-        );
+                sourceList.forEach(file => {
+                    allSources[file] = { content: resolved[file].body };
+                });
 
-        if (args.debug) {
-            console.log('-------------------');
-            console.log('MythX Request Body:\n');
-            console.log(util.inspect(data, false, null, true /* enable colors */));
-        }
+                /* Get the input config for the Solidity Compiler */
 
-        const mythxSpinner = ora({ text: 'Analyzing ' + compiledData.contractName, color: 'yellow', spinner: 'bouncingBar' }).start();
+                const input = compiler.getSolcInput(allSources);
 
-        client.getMythXReport(args, ethAddress, password, data)
-            .then(result => {
-                // Stop the spinner and clear from the terminal
-                mythxSpinner.stop();
+                let compiledData;
 
-                /* Add all the imported contracts source code to the `data` to sourcemap the issue location */
-                data.sources = { ...input.sources };
-
-                if (args.debug){
-                    console.log('-------------------');
-                    console.log('MythX Response Body:\n');
-                    console.log(util.inspect(result, { showHidden: false, depth: null }));
-                    console.log('-------------------');
+                try {
+                    compiledData = compiler.getCompiledContracts(input, solcSnapshot, solidity_file_path);
+                } catch (e) {
+                    console.log(chalk.red(e.message));
+                    process.exit(1);
                 }
 
-                const { issues } = result;
-                const uniqueIssues = report.formatIssues(data, issues);
+                const data = client.getRequestData(
+                    input,
+                    compiledData,
+                    sourceList,
+                    solidity_file_name,
+                    args.sendAST
+                );
 
-                if (uniqueIssues.length === 0) {
-                    console.log(chalk.green('✔ No errors/warnings found in ' + solidity_file_path));
-                } else {
-                    const formatter = report.getFormatter();
-                    console.log(formatter(uniqueIssues));
+                if (args.debug) {
+                    console.log('-------------------');
+                    console.log('MythX Request Body:\n');
+                    console.log(util.inspect(data, false, null, true /* enable colors */));
                 }
+
+                const mythxSpinner = ora({ text: 'Analyzing ' + compiledData.contractName, color: 'yellow', spinner: 'bouncingBar' }).start();
+
+                client.getMythXReport(args, ethAddress, password, data)
+                    .then(result => {
+                        // Stop the spinner and clear from the terminal
+                        mythxSpinner.stop();
+
+                        /* Add all the imported contracts source code to the `data` to sourcemap the issue location */
+                        data.sources = { ...input.sources };
+
+                        if (args.debug){
+                            console.log('-------------------');
+                            console.log('MythX Response Body:\n');
+                            console.log(util.inspect(result, { showHidden: false, depth: null }));
+                            console.log('-------------------');
+                        }
+
+                        const { issues } = result;
+                        const uniqueIssues = report.formatIssues(data, issues);
+
+                        if (uniqueIssues.length === 0) {
+                            console.log(chalk.green('✔ No errors/warnings found in ' + solidity_file_path));
+                        } else {
+                            const formatter = report.getFormatter();
+                            console.log(formatter(uniqueIssues));
+                        }
+                    })
+                    .catch(err => {
+                        // Stop the spinner and clear from the terminal
+                        mythxSpinner.stop();
+
+                        console.log(chalk.red(err));
+                    });
             })
             .catch(err => {
-                // Stop the spinner and clear from the terminal
-                mythxSpinner.stop();
-
-                console.log(chalk.red(err));
+                solcSpinner.fail(`Resolving imports failed`);
+                console.log(chalk.red(err.message))
             });
     });
 } catch (err) {
     solcSpinner.fail(`Compilation with solc v${version} failed`);
-    console.log(chalk.red(err));
+    console.log(chalk.red(err.message));
 }

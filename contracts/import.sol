@@ -1,5 +1,5 @@
 pragma solidity ^0.5.7;
 
-import "./imported.sol";
+import "./vulnerable.sol";
 
-contract Import is Imported {}
+contract Import is Vulnerable {}
