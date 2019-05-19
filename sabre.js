@@ -157,8 +157,8 @@ try {
                     });
             })
             .catch(err => {
-                solcSpinner.fail(`Resolving imports failed`);
-                console.log(chalk.red(err.message))
+                solcSpinner.fail('Resolving imports failed');
+                console.log(chalk.red(err.message));
             });
     });
 } catch (err) {
