@@ -112,7 +112,7 @@ try {
                     input,
                     compiledData,
                     sourceList,
-                    solidity_file_name,
+                    solidity_file_path,
                     args.sendAST
                 );
 
