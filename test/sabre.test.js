@@ -57,7 +57,7 @@ describe('Contracts Compilation Test', function() {
 });
 
 describe('ESlint Issues Format Test', function() {
-    it(`eslint format issues for contract token.sol`, function() {
+    it('eslint format issues for contract token.sol', function() {
         const solidity_file_path = path.resolve(working_directory, `${contractsDir}/token.sol`);
 
         Profiler.resolveAllSources(resolver, [solidity_file_path], solc)
@@ -76,7 +76,7 @@ describe('ESlint Issues Format Test', function() {
                 const data = { sources: { ...input.sources } };
 
                 /* Get the issues from the `issues.json` file to mock the API response */
-                const { issues } = JSON.parse(fs.readFileSync(`issues.json`, 'utf8').toString());
+                const { issues } = JSON.parse(fs.readFileSync('issues.json', 'utf8').toString());
 
                 const uniqueIssues = report.formatIssues(data, issues);
 
