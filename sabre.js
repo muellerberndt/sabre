@@ -80,7 +80,6 @@ const solcSpinner = ora({ text: `Downloading solc v${version}`, color: 'yellow',
 
 try {
     compiler.loadSolcVersion(releases[version], (solcString) => {
-        solcSpinner.succeed(`Compiled with solc v${version} successfully`);
 
         // NOTE: `solcSnapshot` has the same interface as `solc`
         const solcSnapshot = solc.setupMethods(requireFromString(solcString), 'soljson-' + releases[version] + '.js');
@@ -107,6 +106,8 @@ try {
                     console.log(chalk.red(e.message));
                     process.exit(1);
                 }
+
+                solcSpinner.succeed(`Compiled with solc v${version} successfully`);
 
                 const data = client.getRequestData(
                     input,
