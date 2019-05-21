@@ -48,7 +48,7 @@ if (!['quick', 'full'].includes(args.mode)) {
     process.exit(-1);
 }
 
-if (!['stylish', 'compact', 'table', 'html', 'json'].indexOf(args.format)) {
+if (['stylish', 'compact', 'table', 'html', 'json'].indexOf(args.format) < 0) {
     console.log('Invalid output format. Please use "stylish", "compact", "table", "html" or "json".');
     process.exit(-1);
 }
