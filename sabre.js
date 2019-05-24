@@ -48,8 +48,6 @@ if (!['quick', 'full'].includes(args.mode)) {
     process.exit(-1);
 }
 
-console.log(args.format);
-
 if (!['stylish', 'compact', 'table', 'html', 'json'].includes(args.format)) {
     console.log('Invalid output format. Please use "stylish", "compact", "table", "html" or "json".');
     process.exit(-1);
