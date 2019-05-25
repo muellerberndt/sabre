@@ -19,7 +19,8 @@ let password = process.env.MYTHX_PASSWORD;
 
 const args = require('minimist')(process.argv.slice(2), {
     boolean: [ 'noCacheLookup', 'debug', 'sendAST' ],
-    default: { mode: 'quick' },
+    string: [ 'mode', 'format' ],
+    default: { mode: 'quick', format: 'stylish' },
 });
 
 const helpText = `Minimum viable CLI for the MythX security analysis platform.
@@ -29,11 +30,12 @@ USAGE:
 $ sabre [options] <solidity_file>
 
 OPTIONS:
-    --mode <quick/full>             Analysis mode (default=quick)
-    --clientToolName <string>       Override clientToolNames
-    --noCacheLookup                 Deactivate MythX cache lookups
-    --sendAST                       Submit AST instead of source code
-    --debug                         Print MythX API request and response
+    --mode <quick/full>                             Analysis mode (default=quick)
+    --format <stylish/compact/table/html/json>      Output format (default=stylish)
+    --clientToolName <string>                       Override clientToolName
+    --noCacheLookup                                 Deactivate MythX cache lookups
+    --sendAST                                       Submit AST instead of source code
+    --debug                                         Print MythX API request and response
 `;
 
 if (!args._.length) {
@@ -46,9 +48,13 @@ if (!['quick', 'full'].includes(args.mode)) {
     process.exit(-1);
 }
 
+if (['stylish', 'compact', 'table', 'html', 'json'].indexOf(args.format) < 0) {
+    console.log('Invalid output format. Please use "stylish", "compact", "table", "html" or "json".');
+    process.exit(-1);
+}
+
 const working_directory = process.cwd();
 const solidity_file_path = path.resolve(working_directory, args._[0]);
-const solidity_file_name = path.basename(solidity_file_path);
 const contracts_build_directory = path.dirname(solidity_file_path);
 
 if (!(ethAddress && password)) {
@@ -80,7 +86,6 @@ const solcSpinner = ora({ text: `Downloading solc v${version}`, color: 'yellow',
 
 try {
     compiler.loadSolcVersion(releases[version], (solcString) => {
-        solcSpinner.succeed(`Compiled with solc v${version} successfully`);
 
         // NOTE: `solcSnapshot` has the same interface as `solc`
         const solcSnapshot = solc.setupMethods(requireFromString(solcString), 'soljson-' + releases[version] + '.js');
@@ -108,11 +113,13 @@ try {
                     process.exit(1);
                 }
 
+                solcSpinner.succeed(`Compiled with solc v${version} successfully`);
+
                 const data = client.getRequestData(
                     input,
                     compiledData,
                     sourceList,
-                    solidity_file_name,
+                    solidity_file_path,
                     args.sendAST
                 );
 
@@ -145,7 +152,7 @@ try {
                         if (uniqueIssues.length === 0) {
                             console.log(chalk.green(`✔ No errors/warnings found in ${args._[0]} for contract: ${compiledData.contractName}`));
                         } else {
-                            const formatter = report.getFormatter();
+                            const formatter = report.getFormatter(args.format);
                             console.log(formatter(uniqueIssues));
                         }
                     })
