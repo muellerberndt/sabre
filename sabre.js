@@ -18,7 +18,7 @@ let ethAddress = process.env.MYTHX_ETH_ADDRESS;
 let password = process.env.MYTHX_PASSWORD;
 
 const args = require('minimist')(process.argv.slice(2), {
-    boolean: [ 'noCacheLookup', 'debug', 'sendAST' ],
+    boolean: [ 'noCacheLookup', 'debug', 'legacyRequest' ],
     string: [ 'mode', 'format' ],
     default: { mode: 'quick', format: 'stylish' },
 });
@@ -34,7 +34,7 @@ OPTIONS:
     --format <stylish/compact/table/html/json>      Output format (default=stylish)
     --clientToolName <string>                       Override clientToolName
     --noCacheLookup                                 Deactivate MythX cache lookups
-    --sendAST                                       Submit AST instead of source code
+    --legacyRequest                                 Submit source code instead of AST
     --debug                                         Print MythX API request and response
 `;
 
@@ -120,7 +120,7 @@ try {
                     compiledData,
                     sourceList,
                     solidity_file_path,
-                    args.sendAST
+                    args.legacyRequest
                 );
 
                 if (args.debug) {
