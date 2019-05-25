@@ -18,7 +18,7 @@ let ethAddress = process.env.MYTHX_ETH_ADDRESS;
 let password = process.env.MYTHX_PASSWORD;
 
 const args = require('minimist')(process.argv.slice(2), {
-    boolean: [ 'noCacheLookup', 'debug', 'sendAST' ],
+    boolean: [ 'noCacheLookup', 'debug', 'legacyRequest' ],
     string: [ 'mode', 'format' ],
     default: { mode: 'quick', format: 'stylish' },
 });
@@ -34,7 +34,7 @@ OPTIONS:
     --format <stylish/compact/table/html/json>      Output format (default=stylish)
     --clientToolName <string>                       Override clientToolName
     --noCacheLookup                                 Deactivate MythX cache lookups
-    --sendAST                                       Submit AST instead of source code
+    --legacyRequest                                 Submit source code instead of AST
     --debug                                         Print MythX API request and response
 `;
 
@@ -107,7 +107,7 @@ try {
                 let compiledData;
 
                 try {
-                    compiledData = compiler.getCompiledContracts(input, solcSnapshot, solidity_file_path);
+                    compiledData = compiler.getCompiledContracts(input, solcSnapshot, solidity_file_path, args._[1]);
                 } catch (e) {
                     console.log(chalk.red(e.message));
                     process.exit(1);
@@ -120,7 +120,7 @@ try {
                     compiledData,
                     sourceList,
                     solidity_file_path,
-                    args.sendAST
+                    args.legacyRequest
                 );
 
                 if (args.debug) {
@@ -150,7 +150,7 @@ try {
                         const uniqueIssues = report.formatIssues(data, issues);
 
                         if (uniqueIssues.length === 0) {
-                            console.log(chalk.green('✔ No errors/warnings found in ' + solidity_file_path));
+                            console.log(chalk.green(`✔ No errors/warnings found in ${args._[0]} for contract: ${compiledData.contractName}`));
                         } else {
                             const formatter = report.getFormatter(args.format);
                             console.log(formatter(uniqueIssues));
