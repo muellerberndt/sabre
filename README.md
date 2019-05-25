@@ -27,7 +27,7 @@ export MYTHX_PASSWORD=password
 ### Usage
 
 ```
-$ sabre [options] <solidity_file>
+$ sabre [options] <solidity_file> [contract_name]
 
 OPTIONS:
     --mode <quick/full>             Analysis mode (default=quick)

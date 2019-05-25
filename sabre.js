@@ -27,7 +27,7 @@ const helpText = `Minimum viable CLI for the MythX security analysis platform.
 
 USAGE:
 
-$ sabre [options] <solidity_file>
+$ sabre [options] <solidity_file> [contract_name]
 
 OPTIONS:
     --mode <quick/full>                             Analysis mode (default=quick)
