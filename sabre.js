@@ -102,7 +102,7 @@ try {
                 let compiledData;
 
                 try {
-                    compiledData = compiler.getCompiledContracts(input, solcSnapshot, solidity_file_path);
+                    compiledData = compiler.getCompiledContracts(input, solcSnapshot, solidity_file_path, args._[1]);
                 } catch (e) {
                     console.log(chalk.red(e.message));
                     process.exit(1);
@@ -143,7 +143,7 @@ try {
                         const uniqueIssues = report.formatIssues(data, issues);
 
                         if (uniqueIssues.length === 0) {
-                            console.log(chalk.green('✔ No errors/warnings found in ' + solidity_file_path));
+                            console.log(chalk.green(`✔ No errors/warnings found in ${args._[0]} for contract: ${compiledData.contractName}`));
                         } else {
                             const formatter = report.getFormatter();
                             console.log(formatter(uniqueIssues));
