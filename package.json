@@ -1,6 +1,6 @@
 {
   "name": "sabre-mythx",
-  "version": "0.4.5",
+  "version": "0.5.0",
   "description": "Minimum viable client for the MythX smart contract security analysis service",
   "main": "sabre.js",
   "repository": {
@@ -20,24 +20,33 @@
   "author": "Bernhard Mueller",
   "license": "MIT",
   "dependencies": {
-    "armlet": "^2.4.0",
+    "armlet": "^2.6.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
     "minimist": "^1.2.0",
     "openzeppelin-solidity": "^2.2.0",
     "ora": "^3.4.0",
     "package.json": "^2.0.1",
-    "remix-lib": "^0.4.3",
-    "solidity-parser-antlr": "^0.4.2"
+    "remix-lib": "^0.4.6",
+    "solidity-parser-antlr": "^0.4.2",
+    "truffle-compile": "^4.0.14",
+    "truffle-contract": "^4.0.15",
+    "truffle-resolver": "^5.0.13"
   },
   "bin": {
     "sabre": "./sabre.js"
   },
   "scripts": {
-    "lint": "eslint ./sabre.js ./lib",
-    "lint:fix": "eslint --fix ./sabre.js ./lib"
+    "lint": "eslint ./sabre.js ./lib ./test",
+    "lint:fix": "eslint --fix ./sabre.js ./lib ./test",
+    "test": "nyc mocha"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1"
   }
 }

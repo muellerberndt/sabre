@@ -1,0 +1,86 @@
+{
+  "elapsed": 56191,
+  "issues": [
+    {
+      "issues": [
+        {
+          "swcID": "SWC-101",
+          "swcTitle": "Integer Overflow and Underflow",
+          "description": {
+            "head": "The binary subtraction can underflow.",
+            "tail": "The operands of the subtraction operation are not sufficiently constrained. The subtraction could therefore result in an integer underflow. Prevent the underflow by checking inputs or ensure sure that the underflow is caught by an assertion."
+          },
+          "severity": "High",
+          "locations": [
+            {
+              "sourceMap": "265:30:0"
+            }
+          ],
+          "extra": {
+            "testCase": {
+              "initialState": {
+                "accounts": null
+              },
+              "steps": null
+            }
+          }
+        },
+        {
+          "swcID": "SWC-101",
+          "swcTitle": "Integer Overflow and Underflow",
+          "description": {
+            "head": "The binary addition can overflow.",
+            "tail": "The operands of the addition operation are not sufficiently constrained. The addition could therefore result in an integer overflow. Prevent the overflow by checking inputs or ensure sure that the overflow is caught by an assertion."
+          },
+          "severity": "High",
+          "locations": [
+            {
+              "sourceMap": "301:23:0"
+            }
+          ],
+          "extra": {
+            "testCase": {
+              "initialState": {
+                "accounts": null
+              },
+              "steps": null
+            }
+          }
+        }
+      ],
+      "sourceType": "solidity-file",
+      "sourceFormat": "text",
+      "sourceList": [
+        "token.sol"
+      ],
+      "meta": {
+        "coveredInstructions": 206,
+        "coveredPaths": 10,
+        "logs": [
+          {
+            "level": "error",
+            "msg": "Maru:Error: Unable to detect main source to compile"
+          },
+          {
+            "level": "error",
+            "msg": "Maru:Error: Errors returned by the Solidity compiler. Check your code for syntax errors and that you have submitted all imports."
+          }
+        ],
+        "selectedCompiler": "Unknown"
+      }
+    }
+  ],
+  "status": {
+    "apiVersion": "v1.4.14",
+    "harveyVersion": "0.0.18",
+    "maestroVersion": "1.2.10",
+    "maruVersion": "0.4.4",
+    "mythrilVersion": "0.20.4",
+    "queueTime": 3500,
+    "runTime": 42400,
+    "status": "Finished",
+    "submittedAt": "2019-05-15T13:06:05.016Z",
+    "submittedBy": "5c6f94cb06d17300110e3ce9",
+    "uuid": "b0ecf018-cdd1-4593-a6c0-a4f1d005e128"
+  }
+}
