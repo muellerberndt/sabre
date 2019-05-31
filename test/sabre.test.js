@@ -25,8 +25,8 @@ describe('Contracts Compilation Test', function() {
                     const sourceList = Object.keys(resolved);
                     const allSources = {};
 
-                    sourceList.forEach(file => {
-                        allSources[file] = { content: resolved[file].body };
+                    sourceList.forEach(source => {
+                        allSources[source] = { content: resolved[source].body };
                     });
 
                     /* Get the input config for the Solidity Compiler */
@@ -65,8 +65,8 @@ describe('ESlint Issues Format Test', function() {
                 const sourceList = Object.keys(resolved);
                 const allSources = {};
 
-                sourceList.forEach(file => {
-                    allSources['token.sol'] = { content: resolved[file].body };
+                sourceList.forEach(source => {
+                    allSources['token.sol'] = { content: resolved[source].body };
                 });
 
                 /* Get the input config for the Solidity Compiler */
@@ -101,6 +101,47 @@ describe('ESlint Issues Format Test', function() {
                         column: 4
                     }
                 );
+            });
+    });
+});
+
+describe('Compile Specified Contract Test', function() {
+    it('compile OwnedToken contract within OwnedToken.sol', function() {
+        const contractName = 'OwnedToken';
+        const solidity_file_path = path.resolve(working_directory, `${contractsDir}/${contractName}.sol`);
+
+        Profiler.resolveAllSources(resolver, [solidity_file_path], solc)
+            .then(resolved => {
+                const sourceList = Object.keys(resolved);
+                const allSources = {};
+
+                sourceList.forEach(source => {
+                    allSources[source] = { content: resolved[source].body };
+                });
+
+                /* Get the input config for the Solidity Compiler */
+                const input = compiler.getSolcInput(allSources);
+
+                let compiledData;
+
+                try {
+                    compiledData = compiler.getCompiledContracts(input, solc, solidity_file_path, contractName);
+
+                    assert.equal(compiledData.contractName, contractName);
+
+                    /**
+                     * If solc version is at least 0.4.7, then swarm hash is included into the bytecode
+                     * `a165627a7a72305820` is a fixed prefix of swarm info that will be appended to contract bytecode
+                     *
+                     * Ref: https://github.com/ConsenSys/bytecode-verifier/blob/master/src/verifier.js#L59
+                     */
+
+                    assert.isTrue(
+                        compiledData.contract.evm.bytecode.object.indexOf('a165627a7a72305820') !== -1
+                    );
+                } catch (err) {
+                    // Ignore
+                }
             });
     });
 });
