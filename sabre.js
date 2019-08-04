@@ -119,7 +119,19 @@ try {
                     compiledData,
                     sourceList,
                     solidity_file_path,
+                    args.mode
                 );
+
+                let initialDelay;
+                let timeout;
+
+                if (args.mode == "quick") {
+                    initialDelay = 20 * 1000;
+                    timeout = 180 * 1000;
+                } else {
+                    initialDelay = 300 * 1000;
+                    timeout = 2400 * 1000;
+                }
 
                 if (args.debug) {
                     console.log('-------------------');
@@ -129,7 +141,7 @@ try {
 
                 const mythxSpinner = ora({ text: 'Analyzing ' + compiledData.contractName, color: 'yellow', spinner: 'bouncingBar' }).start();
 
-                client.getMythXReport(args, ethAddress, password, data)
+                client.getMythXReport(args, ethAddress, password, data, initialDelay, timeout)
                     .then(result => {
                         // Stop the spinner and clear from the terminal
                         mythxSpinner.stop();
