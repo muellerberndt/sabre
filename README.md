@@ -33,11 +33,10 @@ OPTIONS:
     --mode <quick/full>             Analysis mode (default=quick)
     --clientToolName <string>       Override clientToolNames
     --noCacheLookup                 Deactivate MythX cache lookups
-    --sendAST                       Submit AST instead of source code
     --debug                         Print MythX API request and response
 ```
 
-This analysis should take about 60 to 90 seconds to finish.
+A 'quick' analysis takes 20 - 120 seconds to finish while a 'full' analysis takes approximately 30 minutes.
 
 ### Example
 ```
