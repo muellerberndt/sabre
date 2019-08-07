@@ -16,6 +16,7 @@ const util = require('util');
 
 let ethAddress = process.env.MYTHX_ETH_ADDRESS;
 let password = process.env.MYTHX_PASSWORD;
+let apiUrl = process.env.MYTHX_API_URL;
 
 const args = require('minimist')(process.argv.slice(2), {
     boolean: [ 'noCacheLookup', 'debug'],
@@ -142,7 +143,7 @@ try {
 
                 const analysisSpinner = ora({ text: 'Analyzing ' + compiledData.contractName, color: 'yellow', spinner: 'bouncingBar' }).start();
 
-                client.getMythXReport(ethAddress, password, data, initialDelay, timeout)
+                client.getMythXReport(apiUrl, ethAddress, password, data, initialDelay, timeout)
                     .then(result => {
                         /* Stop the spinner and clear from the terminal */
                         analysisSpinner.stop();
