@@ -19,7 +19,7 @@ let password = process.env.MYTHX_PASSWORD;
 let apiUrl = process.env.MYTHX_API_URL;
 
 const args = require('minimist')(process.argv.slice(2), {
-    boolean: [ 'noCacheLookup', 'debug'],
+    boolean: [ 'version', 'help', 'apiVersion', 'noCacheLookup', 'debug' ],
     string: [ 'mode', 'format' ],
     default: { mode: 'quick', format: 'stylish' },
 });
@@ -31,6 +31,8 @@ USAGE:
 $ sabre [options] <solidity_file> [contract_name]
 
 OPTIONS:
+    --version                                       Print version
+    --help                                          Print help message
     --mode <quick/full>                             Analysis mode (default=quick)
     --format <stylish/compact/table/html/json>      Output format (default=stylish)
     --clientToolName <string>                       Override clientToolName
@@ -38,10 +40,18 @@ OPTIONS:
     --debug                                         Print MythX API request and response
 `;
 
-if (!args._.length) {
+if (args.version) {
+    const { version } = require('./package.json');
+
+    console.log(version);
+
+    process.exit(0);
+}
+
+if (!args._.length || args.help) {
     console.log(helpText);
 
-    process.exit(-1);
+    process.exit(0);
 }
 
 if (!['quick', 'full'].includes(args.mode)) {
