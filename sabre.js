@@ -16,9 +16,10 @@ const util = require('util');
 
 let ethAddress = process.env.MYTHX_ETH_ADDRESS;
 let password = process.env.MYTHX_PASSWORD;
+let apiUrl = process.env.MYTHX_API_URL;
 
 const args = require('minimist')(process.argv.slice(2), {
-    boolean: [ 'noCacheLookup', 'debug'],
+    boolean: [ 'version', 'help', 'noCacheLookup', 'debug' ],
     string: [ 'mode', 'format' ],
     default: { mode: 'quick', format: 'text' },
 });
@@ -30,6 +31,8 @@ USAGE:
 $ sabre [options] <solidity_file> [contract_name]
 
 OPTIONS:
+    --version                                       Print version
+    --help                                          Print help message
     --mode <quick/full>                             Analysis mode (default=quick)
     --format <text/stylish/compact/table/html/json> Output format (default=text)
     --clientToolName <string>                       Override clientToolName
@@ -37,18 +40,29 @@ OPTIONS:
     --debug                                         Print MythX API request and response
 `;
 
-if (!args._.length) {
+if (args.version) {
+    const { version } = require('./package.json');
+
+    console.log(version);
+
+    process.exit(0);
+}
+
+if (!args._.length || args.help) {
     console.log(helpText);
-    process.exit(-1);
+
+    process.exit(0);
 }
 
 if (!['quick', 'full'].includes(args.mode)) {
     console.log('Invalid analysis mode. Please use either "quick" or "full".');
+
     process.exit(-1);
 }
 
 if (['stylish', 'compact', 'table', 'html', 'json', 'text'].indexOf(args.format) < 0) {
     console.log('Invalid output format. Please use "stylish", "compact", "table", "html" or "json".');
+
     process.exit(-1);
 }
 
@@ -67,12 +81,13 @@ try {
     solidity_code = fs.readFileSync(solidity_file_path, 'utf8');
 } catch (err) {
     console.log('Error opening input file' + err.message);
+
     process.exit(-1);
 }
 
 const resolver = new Resolver({
     working_directory,
-    contracts_build_directory,
+    contracts_build_directory
 });
 
 const allSources = {};
@@ -85,12 +100,10 @@ const solcSpinner = ora({ text: `Downloading solc v${version}`, color: 'yellow',
 
 try {
     compiler.loadSolcVersion(releases[version], (solcString) => {
-
-        // NOTE: `solcSnapshot` has the same interface as `solc`
+        /* NOTE: `solcSnapshot` has the same interface as `solc` */
         const solcSnapshot = solc.setupMethods(requireFromString(solcString), 'soljson-' + releases[version] + '.js');
 
         /* Parse all the import sources and the `sourceList` */
-
         Profiler.resolveAllSources(resolver, [solidity_file_path], solcSnapshot)
             .then(resolved => {
                 const sourceList = Object.keys(resolved);
@@ -100,7 +113,6 @@ try {
                 });
 
                 /* Get the input config for the Solidity Compiler */
-
                 const input = compiler.getSolcInput(allSources);
 
                 let compiledData;
@@ -109,17 +121,17 @@ try {
                     compiledData = compiler.getCompiledContracts(input, solcSnapshot, solidity_file_path, args._[1]);
                 } catch (e) {
                     console.log(chalk.red(e.message));
+
                     process.exit(1);
                 }
 
                 solcSpinner.succeed(`Compiled with solc v${version} successfully`);
 
                 const data = client.getRequestData(
-                    input,
                     compiledData,
                     sourceList,
                     solidity_file_path,
-                    args.mode
+                    args
                 );
 
                 let initialDelay;
@@ -139,12 +151,12 @@ try {
                     console.log(util.inspect(data, false, null, true /* enable colors */));
                 }
 
-                const mythxSpinner = ora({ text: 'Analyzing ' + compiledData.contractName, color: 'yellow', spinner: 'bouncingBar' }).start();
+                const analysisSpinner = ora({ text: 'Analyzing ' + compiledData.contractName, color: 'yellow', spinner: 'bouncingBar' }).start();
 
-                client.getMythXReport(args, ethAddress, password, data, initialDelay, timeout)
+                client.getMythXReport(apiUrl, ethAddress, password, data, initialDelay, timeout)
                     .then(result => {
-                        // Stop the spinner and clear from the terminal
-                        mythxSpinner.stop();
+                        /* Stop the spinner and clear from the terminal */
+                        analysisSpinner.stop();
 
                         /* Add all the imported contracts source code to the `data` to sourcemap the issue location */
                         data.sources = { ...input.sources };
@@ -163,22 +175,24 @@ try {
                             console.log(chalk.green(`✔ No errors/warnings found in ${args._[0]} for contract: ${compiledData.contractName}`));
                         } else {
                             const formatter = report.getFormatter(args.format);
+
                             console.log(formatter(uniqueIssues));
                         }
                     })
                     .catch(err => {
-                        // Stop the spinner and clear from the terminal
-                        mythxSpinner.stop();
+                        analysisSpinner.fail('Analysis failed');
 
                         console.log(chalk.red(err));
                     });
             })
             .catch(err => {
                 solcSpinner.fail('Resolving imports failed');
-                console.log(chalk.red(err.message));
+
+                console.log(chalk.red(err));
             });
     });
 } catch (err) {
     solcSpinner.fail(`Compilation with solc v${version} failed`);
+
     console.log(chalk.red(err.message));
 }
