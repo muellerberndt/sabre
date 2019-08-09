@@ -20,7 +20,7 @@ let password = process.env.MYTHX_PASSWORD;
 const args = require('minimist')(process.argv.slice(2), {
     boolean: [ 'noCacheLookup', 'debug'],
     string: [ 'mode', 'format' ],
-    default: { mode: 'quick', format: 'stylish' },
+    default: { mode: 'quick', format: 'text' },
 });
 
 const helpText = `Minimum viable CLI for the MythX security analysis platform.
@@ -31,7 +31,7 @@ $ sabre [options] <solidity_file> [contract_name]
 
 OPTIONS:
     --mode <quick/full>                             Analysis mode (default=quick)
-    --format <stylish/compact/table/html/json>      Output format (default=stylish)
+    --format <text/stylish/compact/table/html/json> Output format (default=text)
     --clientToolName <string>                       Override clientToolName
     --noCacheLookup                                 Deactivate MythX cache lookups
     --debug                                         Print MythX API request and response
@@ -47,7 +47,7 @@ if (!['quick', 'full'].includes(args.mode)) {
     process.exit(-1);
 }
 
-if (['stylish', 'compact', 'table', 'html', 'json'].indexOf(args.format) < 0) {
+if (['stylish', 'compact', 'table', 'html', 'json', 'text'].indexOf(args.format) < 0) {
     console.log('Invalid output format. Please use "stylish", "compact", "table", "html" or "json".');
     process.exit(-1);
 }
