@@ -19,7 +19,7 @@ let password = process.env.MYTHX_PASSWORD;
 let apiUrl = process.env.MYTHX_API_URL;
 
 const args = require('minimist')(process.argv.slice(2), {
-    boolean: [ 'version', 'help', 'apiVersion', 'noCacheLookup', 'debug' ],
+    boolean: [ 'version', 'help', 'noCacheLookup', 'debug' ],
     string: [ 'mode', 'format' ],
     default: { mode: 'quick', format: 'stylish' },
 });
