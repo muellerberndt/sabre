@@ -30,10 +30,13 @@ export MYTHX_PASSWORD=password
 $ sabre [options] <solidity_file> [contract_name]
 
 OPTIONS:
-    --mode <quick/full>             Analysis mode (default=quick)
-    --clientToolName <string>       Override clientToolNames
-    --noCacheLookup                 Deactivate MythX cache lookups
-    --debug                         Print MythX API request and response
+    --version                                       Print version
+    --help                                          Print help message
+    --mode <quick/full>                             Analysis mode (default=quick)
+    --format <text/stylish/compact/table/html/json> Output format (default=text)
+    --clientToolName <string>                       Override clientToolName
+    --noCacheLookup                                 Deactivate MythX cache lookups
+    --debug                                         Print MythX API request and response
 ```
 
 A 'quick' analysis takes 20 - 120 seconds to finish while a 'full' analysis takes approximately 30 minutes.
