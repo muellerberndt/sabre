@@ -66,35 +66,34 @@ if (['stylish', 'compact', 'table', 'html', 'json', 'text'].indexOf(args.format)
     process.exit(-1);
 }
 
-const working_directory = process.cwd();
-const solidity_file_path = path.resolve(working_directory, args._[0]);
-const contracts_build_directory = path.dirname(solidity_file_path);
+const solidityFilePath = path.resolve(process.cwd(), args._[0]);
+const solidityFileDir = path.dirname(solidityFilePath);
 
 if (!(ethAddress && password)) {
     ethAddress = '0x0000000000000000000000000000000000000000';
     password = 'trial';
 }
 
-let solidity_code;
+let solidityCode;
 
 try {
-    solidity_code = fs.readFileSync(solidity_file_path, 'utf8');
+    solidityCode = fs.readFileSync(solidityFilePath, 'utf8');
 } catch (err) {
-    console.log('Error opening input file' + err.message);
+    console.log('Error opening input file ' + err.message);
 
     process.exit(-1);
 }
 
 const resolver = new Resolver({
-    working_directory,
-    contracts_build_directory
+    working_directory: solidityFileDir,
+    contracts_build_directory: solidityFileDir
 });
 
 const allSources = {};
 
 /* Get the version of the Solidity Compiler */
 
-const version = compiler.getSolidityVersion(solidity_code);
+const version = compiler.getSolidityVersion(solidityCode);
 
 const solcSpinner = ora({ text: `Downloading solc v${version}`, color: 'yellow', spinner: 'bouncingBar' }).start();
 
@@ -104,7 +103,7 @@ try {
         const solcSnapshot = solc.setupMethods(requireFromString(solcString), 'soljson-' + releases[version] + '.js');
 
         /* Parse all the import sources and the `sourceList` */
-        Profiler.resolveAllSources(resolver, [solidity_file_path], solcSnapshot)
+        Profiler.resolveAllSources(resolver, [solidityFilePath], solcSnapshot)
             .then(resolved => {
                 const sourceList = Object.keys(resolved);
 
@@ -118,7 +117,7 @@ try {
                 let compiledData;
 
                 try {
-                    compiledData = compiler.getCompiledContracts(input, solcSnapshot, solidity_file_path, args._[1]);
+                    compiledData = compiler.getCompiledContracts(input, solcSnapshot, solidityFilePath, args._[1]);
                 } catch (e) {
                     console.log(chalk.red(e.message));
 
@@ -130,7 +129,7 @@ try {
                 const data = client.getRequestData(
                     compiledData,
                     sourceList,
-                    solidity_file_path,
+                    solidityFilePath,
                     args
                 );
 
@@ -161,7 +160,7 @@ try {
                         /* Add all the imported contracts source code to the `data` to sourcemap the issue location */
                         data.sources = { ...input.sources };
 
-                        if (args.debug){
+                        if (args.debug) {
                             console.log('-------------------');
                             console.log('MythX Response Body:\n');
                             console.log(util.inspect(result, { showHidden: false, depth: null }));
