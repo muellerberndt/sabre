@@ -100,7 +100,12 @@ const solcSpinner = ora({ text: `Downloading solc v${version}`, color: 'yellow',
 try {
     compiler.loadSolcVersion(releases[version], (solcString) => {
         /* NOTE: `solcSnapshot` has the same interface as `solc` */
-        const solcSnapshot = solc.setupMethods(requireFromString(solcString), 'soljson-' + releases[version] + '.js');
+        const solcSnapshot = solc.setupMethods(
+            requireFromString(solcString),
+            'soljson-' + releases[version] + '.js'
+        );
+
+        let compiledData;
 
         /* Parse all the import sources and the `sourceList` */
         Profiler.resolveAllSources(resolver, [solidityFilePath], solcSnapshot)
@@ -113,8 +118,6 @@ try {
 
                 /* Get the input config for the Solidity Compiler */
                 const input = compiler.getSolcInput(allSources);
-
-                let compiledData;
 
                 try {
                     compiledData = compiler.getCompiledContracts(input, solcSnapshot, solidityFilePath, args._[1]);
@@ -159,6 +162,9 @@ try {
 
                         /* Add all the imported contracts source code to the `data` to sourcemap the issue location */
                         data.sources = { ...input.sources };
+
+                        /* Copy reference to compiled function hashes */
+                        data.functionHashes = compiledData.functionHashes;
 
                         if (args.debug) {
                             console.log('-------------------');
