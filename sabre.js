@@ -187,6 +187,8 @@ try {
                     .catch(err => {
                         analysisSpinner.fail('Analysis failed');
 
+                        console.log(err);
+
                         console.log(chalk.red(err));
                     });
             })
