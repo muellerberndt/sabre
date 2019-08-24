@@ -20,6 +20,7 @@
   "author": "Bernhard Mueller",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.19.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
     "minimist": "^1.2.0",
