@@ -1,0 +1,65 @@
+{
+  "uuid": "25275bc8-48d8-4224-90dc-edbc10041c84",
+  "issues": [
+    {
+      "issues": [
+        {
+          "swcID": "SWC-103",
+          "swcTitle": "Floating Pragma",
+          "description": {
+            "head": "No pragma is set.",
+            "tail": "It is recommended to make a conscious choice on what version of Solidity is used for compilation. Currently no version is set in the Solidity file."
+          },
+          "severity": "Low",
+          "locations": [
+            {
+              "sourceMap": "0:0:0",
+              "sourceType": "solidity-file",
+              "sourceFormat": "text",
+              "sourceList": [
+                "TokenSale.sol"
+              ]
+            }
+          ],
+          "extra": {
+            "discoveryTime": 46314763,
+            "toolName": "maru"
+          },
+          "decodedLocations": null
+        },
+        {
+          "swcID": "SWC-119",
+          "swcTitle": "Shadowing State Variables",
+          "description": {
+            "head": "State variable shadows another state variable.",
+            "tail": "The state variable \"hardcap\" in contract \"Presale\" shadows another state variable with the same name \"hardcap\" in contract \"Tokensale\"."
+          },
+          "severity": "Low",
+          "locations": [
+            {
+              "sourceMap": "172:25:0",
+              "sourceType": "solidity-file",
+              "sourceFormat": "text",
+              "sourceList": [
+                "TokenSale.sol"
+              ]
+            }
+          ],
+          "extra": {
+            "discoveryTime": 49669989,
+            "toolName": "maru"
+          },
+          "decodedLocations": null
+        }
+      ],
+      "sourceType": "solidity-file",
+      "sourceFormat": "text",
+      "sourceList": [
+        "TokenSale.sol"
+      ],
+      "meta": {
+        "selectedCompiler": "Unknown"
+      }
+    }
+  ]
+}
