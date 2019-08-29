@@ -74,7 +74,7 @@ describe('Compile test', () => {
                 );
             } else {
                 assert.fail(
-                    "None of compile data or compile error were detected"
+                    'None of compile data or compile error were detected'
                 );
             }
         }).timeout(20000);
