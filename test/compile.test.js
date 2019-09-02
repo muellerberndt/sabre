@@ -68,10 +68,14 @@ describe('Compile test', () => {
                     )
                 );
             } else if (error) {
-                assert.equal(
-                    error.message,
-                    '✖ Compiling the Solidity code did not return any bytecode. Note that abstract contracts cannot be analyzed.'
-                );
+                const prefixes = [
+                    'Compiling the Solidity code did not return any bytecode',
+                    'Unable to compile',
+                    'No contracts detected after compiling',
+                    'No contracts found'
+                ];
+
+                assert.isTrue(prefixes.some(prefix => error.message.startsWith(prefix)));
             } else {
                 assert.fail(
                     'None of compile data or compile error were detected'
