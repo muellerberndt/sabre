@@ -40,18 +40,46 @@ OPTIONS:
     --debug                                         Print MythX API request and response
 ```
 
-A 'quick' analysis takes 20 - 120 seconds to finish while a 'full' analysis takes approximately 30 minutes.
+A 'quick' analysis takes 20 - 120 seconds to finish while a 'full' mode analysis takes approximately 30 minutes.
 
 ### Example
+
 ```
-$ sabre contracts/token.sol
-  ✔ Compiled with solc v0.5.7 successfully
-  
-  token.sol
-    13:4  error  The binary subtraction can underflow  https://smartcontractsecurity.github.io/SWC-registry/docs/SWC-101
-    14:4  error  The binary addition can overflow      https://smartcontractsecurity.github.io/SWC-registry/docs/SWC-101
-  
-  ✖ 2 problems (2 errors, 0 warnings)
+$ sabre contracts/vulnerable.sol 
+✔ Loaded solc v0.5.10 from local cache
+✔ Compiled with solc v0.5.10 successfully
+✔ Analysis job with UUID 647cefa9-51e6-47b1-a293-bb17dd1b991a is now in progress
+==== Unprotected SELFDESTRUCT Instruction ====
+Severity: High
+File: /Users/bernhardmueller/Projects/sabre/contracts/vulnerable.sol
+Link: https://smartcontractsecurity.github.io/SWC-registry/docs/SWC-106
+--------------------
+The contract can be killed by anyone.
+Anyone can kill this contract and withdraw its balance to an arbitrary address.
+--------------------
+Location: from 7:8 to 7:32
+
+selfdestruct(msg.sender)
+--------------------
+Transaction Sequence:
+
+Tx #1:
+    Origin: 0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef [ ATTACKER ]
+    Function: f() [ 26121ff0 ]
+    Data: 0x26121ff0
+    Value: 0x0
+
+==== Floating Pragma ====
+Severity: Low
+File: /Users/bernhardmueller/Projects/sabre/contracts/vulnerable.sol
+Link: https://smartcontractsecurity.github.io/SWC-registry/docs/SWC-103
+--------------------
+A floating pragma is set.
+It is recommended to make a conscious choice on what version of Solidity is used for compilation. Currently multiple versions "^0.5.7" are allowed.
+--------------------
+Location: from 1:0 to 1:23
+
+pragma solidity ^0.5.7;
 ```
 
 ## Writing your own MythX Tools
