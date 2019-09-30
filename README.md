@@ -5,7 +5,7 @@
 	<img src="/static/sabre_v2.jpg" width="100%"/>
 </p>
 
-Sabre is a experimental [MythX](https://mythx.io) client. It analyzes a Solidity smart contracts using the MythX cloud service.
+Sabre is a security analysis tool for smart contracts written in Solidity. It uses the [MythX cloud service](https://mythx.io).
 
 ## Usage
 
