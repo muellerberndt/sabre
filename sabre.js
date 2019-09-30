@@ -7,21 +7,37 @@ const env = {
 };
 
 const args = require('minimist')(process.argv.slice(2), {
-    boolean: [ 'version', 'apiVersion', 'help', 'noCacheLookup', 'debug' ],
+    boolean: [ 'help', 'noCacheLookup', 'debug' ],
     string: [ 'mode', 'format' ],
     default: { mode: 'quick', format: 'text' },
 });
 
+let command = args._[0];
+
 let controller;
 
-if (args.version) {
+switch (command) {
+case 'version':
     controller = require('./lib/controllers/version');
-} else if (args.apiVersion) {
-    controller = require('./lib/controllers/api_version');
-} else if (args.help || !args._.length) {
-    controller = require('./lib/controllers/help');
-} else {
+    break;
+case 'status':
+    controller = require('./lib/controllers/status');
+    break;
+case 'list':
+    controller = require('./lib/controllers/list');
+    break;
+case 'report':
+    controller = require('./lib/controllers/report');
+    break;
+case 'analyze':
     controller = require('./lib/controllers/analyze');
+    break;
+case 'apiVersion':
+    controller = require('./lib/controllers/api_version');
+    break;
+default:
+    controller = require('./lib/controllers/help');
+    break;
 }
 
 controller(env, args);
