@@ -26,9 +26,6 @@ case 'status':
 case 'list':
     controller = require('./lib/controllers/list');
     break;
-case 'report':
-    controller = require('./lib/controllers/report');
-    break;
 case 'analyze':
     controller = require('./lib/controllers/analyze');
     break;
