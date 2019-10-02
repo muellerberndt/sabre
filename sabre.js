@@ -3,7 +3,8 @@
 const env = {
     ethAddress: process.env.MYTHX_ETH_ADDRESS,
     password: process.env.MYTHX_PASSWORD,
-    apiUrl: process.env.MYTHX_API_URL
+    apiUrl: process.env.MYTHX_API_URL,
+    accessToken: process.env.MYTHX_ACCESS_TOKEN
 };
 
 const args = require('minimist')(process.argv.slice(2), {
