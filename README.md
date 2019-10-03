@@ -15,9 +15,21 @@ Sabre is a security analysis tool for smart contracts written in Solidity. It us
 $ npm install -g sabre-mythx
 ```
 
-### API Credentials
+### Setup Account
 
-Use [Metamask](https://metamask.io) or a web3-enabled browser to sign up for a free account on the [MythX website](https://mythx.io) and set your API password. Set up your environment using the Ethereum address you signed up with as the username (for increased convenience add those two lines into your `.bashrc` or `.bash_profile`).
+Use [Metamask](https://metamask.io) or a web3-enabled browser to sign up for a free account on the [MythX website](https://mythx.io)
+
+### Access Token (Recommended)
+
+Login to the dashboard of your account and generate `MythX API Key` in the `Profile` tab. Set up your environment using the `MYTHX_ACCESS_TOKEN` (for increased convenience add the token into your `.bashrc` or `.bash_profile`).
+
+```
+export MYTHX_ACCESS_TOKEN=abc123...
+```
+
+### API Credentials (Unsecure)
+
+Set your API password for the created account. Set up your environment using the Ethereum address you signed up with as the username (for increased convenience add those two lines into your `.bashrc` or `.bash_profile`).
 
 ```
 export MYTHX_ETH_ADDRESS=0x(...)
