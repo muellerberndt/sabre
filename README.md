@@ -30,15 +30,11 @@ Run `sabre analyze <solidity-file> [contract-name]` to submit a smart contract f
 
 #### Analysis options
 
-##### Analysis mode
-
 ```
 --mode <quick/full>
 ```
 
 MythX integrates various analysis types including static analysis, input fuzzing and symbolic execution. In the backend, each incoming analysis job is distributed to a number of workers that perform various tasks in parallel. Currently, there are two analysis modes that differ in the amount of resources dedicated to the analysis.
-
-##### Report format
 
 ```
 --format <text/stylish/compact/table/html/json>
@@ -46,15 +42,11 @@ MythX integrates various analysis types including static analysis, input fuzzing
 
 Select the report format. By default, Sabre outputs a verbose text report. Other options `stylish`, `compact`, `table`, `html` and `json`. Note that you can also view reports for past analyses on the [dashboard](http://dashboard.mythx.io).
 
-##### Client tool name
-
 ```
 --clientToolName <string>
 ```
 
 You can [integrate Sabre into your own MythX tool](https://docs.mythx.io/en/latest/building-security-tools/) and become eligible for a share of API revenues. In that case, you'll want to use the `--clientToolName` argument to override the tool id which is used by the API to identify your tool. 
-
-##### Debug
 
 ```
 --debug
