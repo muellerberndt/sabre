@@ -34,7 +34,7 @@ Run `sabre analyze <solidity-file> [contract-name]` to submit a smart contract f
 --mode <quick/full>
 ```
 
-MythX integrates various analysis types including static analysis, input fuzzing and symbolic execution. In the backend, each incoming analysis job is distributed to a number of workers that perform various tasks in parallel. There are two analysis modes, "quick" and "full", that differ in the amount of resources dedicated to the analysis.
+MythX integrates various analysis methods including static analysis, input fuzzing and symbolic execution. In the backend, each incoming analysis job is distributed to a number of workers that perform various tasks in parallel. There are two analysis modes, "quick" and "full", that differ in the amount of resources dedicated to the analysis.
 
 <p align="lsft">
 	<img src="/static/modes.png" height="250px"/>
