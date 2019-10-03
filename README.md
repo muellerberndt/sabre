@@ -15,83 +15,62 @@ Sabre is a security analysis tool for smart contracts written in Solidity. It us
 $ npm install -g sabre-mythx
 ```
 
-### Setup Account
+### Setting up an Account
 
-Use [Metamask](https://metamask.io) or a web3-enabled browser to sign up for a free account on the [MythX website](https://mythx.io)
-
-### Access Token (Recommended)
-
-Login to the dashboard of your account and generate `MythX API Key` in the `Profile` tab. Set up your environment using the `MYTHX_ACCESS_TOKEN` (for increased convenience add the token into your `.bashrc` or `.bash_profile`).
-
-```
-export MYTHX_ACCESS_TOKEN=abc123...
-```
-
-### API Credentials (Unsecure)
-
-Set your API password for the created account. Set up your environment using the Ethereum address you signed up with as the username (for increased convenience add those two lines into your `.bashrc` or `.bash_profile`).
+Use [Metamask](https://metamask.io) or a web3-enabled browser to sign up for a free account on the [MythX website](https://mythx.io). Set up your environment using the Ethereum address you signed up with as the username (for increased convenience add those two lines into your `.bashrc` or `.bash_profile`).
 
 ```
 export MYTHX_ETH_ADDRESS=0x(...)
 export MYTHX_PASSWORD=password
 ```
 
-### Usage
+### Analyzing a Solidity File
+
+Run `sabre analyze <solidity-file> [contract-name]` to submit a smart contract for analysis. The default mode is "quick" analysis which returns results after approximately 2 minutes. You'll also get a dashboard link where you can monitor the progress and view the report later.
+
+#### Analysis options
+
+##### Analysis mode
 
 ```
-$ sabre [options] <solidity_file> [contract_name]
-
-OPTIONS:
-    --version                                       Print version
-    --help                                          Print help message
-    --apiVersion                                    Print MythX API version
-    --mode <quick/full>                             Analysis mode (default=quick)
-    --format <text/stylish/compact/table/html/json> Output format (default=text)
-    --clientToolName <string>                       Override clientToolName
-    --noCacheLookup                                 Deactivate MythX cache lookups
-    --debug                                         Print MythX API request and response
+--mode <quick/full>
 ```
 
-A 'quick' analysis takes 20 - 120 seconds to finish while a 'full' mode analysis takes approximately 30 minutes.
+MythX integrates various analysis types including static analysis, input fuzzing and symbolic execution. In the backend, each incoming analysis job is distributed to a number of workers that perform various tasks in parallel. Currently, there are two analysis modes that differ in the amount of resources dedicated to the analysis.
 
-### Example
+##### Report format
 
 ```
-$ sabre contracts/vulnerable.sol 
-✔ Loaded solc v0.5.10 from local cache
-✔ Compiled with solc v0.5.10 successfully
-✔ Analysis job with UUID 647cefa9-51e6-47b1-a293-bb17dd1b991a is now in progress
-==== Unprotected SELFDESTRUCT Instruction ====
-Severity: High
-File: /Users/bernhardmueller/Projects/sabre/contracts/vulnerable.sol
-Link: https://smartcontractsecurity.github.io/SWC-registry/docs/SWC-106
---------------------
-The contract can be killed by anyone.
-Anyone can kill this contract and withdraw its balance to an arbitrary address.
---------------------
-Location: from 7:8 to 7:32
+--format <text/stylish/compact/table/html/json>
+```
 
-selfdestruct(msg.sender)
---------------------
-Transaction Sequence:
+Select the report format. By default, Sabre outputs a verbose text report. Other options `stylish`, `compact`, `table`, `html` and `json`. Note that you can also view reports for past analyses on the [dashboard](http://dashboard.mythx.io).
 
-Tx #1:
-    Origin: 0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef [ ATTACKER ]
-    Function: f() [ 26121ff0 ]
-    Data: 0x26121ff0
-    Value: 0x0
+##### Client tool name
 
-==== Floating Pragma ====
-Severity: Low
-File: /Users/bernhardmueller/Projects/sabre/contracts/vulnerable.sol
-Link: https://smartcontractsecurity.github.io/SWC-registry/docs/SWC-103
---------------------
-A floating pragma is set.
-It is recommended to make a conscious choice on what version of Solidity is used for compilation. Currently multiple versions "^0.5.7" are allowed.
---------------------
-Location: from 1:0 to 1:23
+```
+--clientToolName <string>
+```
 
-pragma solidity ^0.5.7;
+You can [integrate Sabre into your own MythX tool](https://docs.mythx.io/en/latest/building-security-tools/) and become eligible for a share of API revenues. In that case, you'll want to use the `--clientToolName` argument to override the tool id which is used by the API to identify your tool. 
+
+##### Debug
+
+```
+--debug
+```
+
+Dump the API request and reponse when submitting an analysis.
+
+### Other commands
+
+Besides `analyze` the following commands are available.
+
+```
+- list              Get a list of submitted analyses.
+- status <UUID>     Get the status of an already submitted analysis
+- version           Print Sabre Version
+- apiVersion:       Print MythX API version
 ```
 
 ## Writing your own MythX Tools
