@@ -40,10 +40,6 @@ MythX integrates various analysis methods including static analysis, input fuzzi
 	<img src="/static/modes.png" height="250px"/>
 </p>
 
-##### What is detected?
-
-MythX currently covers 26 of the vulnerability classes listed in the [Smart Contract Weakness Classication Registry](https://swcregistry.io). See also [SWC coverage](https://mythx.io/swc-coverage).
-
 #### Report format
 
 ```
