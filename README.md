@@ -5,7 +5,7 @@
 	<img src="/static/sabre_v2.jpg" width="100%"/>
 </p>
 
-Sabre is a security analysis tool for smart contracts written in Solidity. It uses the [MythX cloud service](https://mythx.io).
+Sabre is a security analysis tool for smart contracts written in Solidity. It uses the [MythX cloud service](https://mythx.io) which detects [a wide range of security issues](https://mythx.io/swc-coverage).
 
 ## Usage
 
@@ -28,19 +28,31 @@ export MYTHX_PASSWORD=password
 
 Run `sabre analyze <solidity-file> [contract-name]` to submit a smart contract for analysis. The default mode is "quick" analysis which returns results after approximately 2 minutes. You'll also get a dashboard link where you can monitor the progress and view the report later.
 
-#### Analysis options
+#### Analysis mode
 
 ```
 --mode <quick/full>
 ```
 
-MythX integrates various analysis types including static analysis, input fuzzing and symbolic execution. In the backend, each incoming analysis job is distributed to a number of workers that perform various tasks in parallel. Currently, there are two analysis modes that differ in the amount of resources dedicated to the analysis.
+MythX integrates various analysis types including static analysis, input fuzzing and symbolic execution. In the backend, each incoming analysis job is distributed to a number of workers that perform various tasks in parallel. There are two analysis modes, "quick" and "full", that differ in the amount of resources dedicated to the analysis.
+
+<p align="lsft">
+	<img src="/static/modes.png" height="250px"/>
+</p>
+
+##### What is detected?
+
+MythX currently covers 26 of the vulnerability classes listed in the [Smart Contract Weakness Classication Registry](https://swcregistry.io). See also [SWC coverage](https://mythx.io/swc-coverage).
+
+#### Report format
 
 ```
 --format <text/stylish/compact/table/html/json>
 ```
 
 Select the report format. By default, Sabre outputs a verbose text report. Other options `stylish`, `compact`, `table`, `html` and `json`. Note that you can also view reports for past analyses on the [dashboard](http://dashboard.mythx.io).
+
+#### Client tool name
 
 ```
 --clientToolName <string>
