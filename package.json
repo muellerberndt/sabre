@@ -1,7 +1,7 @@
 {
   "name": "sabre-mythx",
-  "version": "0.9.3",
-  "description": "Minimum viable client for the MythX smart contract security analysis service",
+  "version": "0.9.4",
+  "description": "Client for the MythX smart contract security analysis service",
   "main": "sabre.js",
   "repository": {
     "type": "git",
