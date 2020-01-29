@@ -19,6 +19,11 @@ if (!(username && password) && !apiKey) {
     process.exit(-1);
 }
 
+if (username && password) {
+    console.log('You are running Sabre with username/password auth which may be removed in a future version. Please use MYTHX_API_KEY instead.');
+
+}
+
 const args = require('minimist')(process.argv.slice(2), {
     boolean: [ 'help', 'noCacheLookup', 'debug' ],
     string: [ 'mode', 'format' ],
