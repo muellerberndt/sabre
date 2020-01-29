@@ -11,9 +11,9 @@ if (!env.username) {
     env.username = process.env.MYTHX_ETH_ADDRESS;  // for backwards compatibility
 }
 
-let { username, password, apiUrl, accessToken } = env;
+let { username, password, apiUrl, apiKey } = env;
 
-if (!(username && password) && !accessToken) {
+if (!(username && password) && !apiKey) {
     console.log('Unauthenticated use of MythX has been discontinued. Sign up for a free a account at https://mythx.io/ and set the MYTHX_API_KEY environment variable.');
 
     process.exit(-1);
