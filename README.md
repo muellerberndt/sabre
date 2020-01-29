@@ -19,11 +19,10 @@ $ npm install -g sabre-mythx
 
 ### Setting up an Account
 
-Use [Metamask](https://metamask.io) or a web3-enabled browser to sign up for a free account on the [MythX website](https://mythx.io). Set up your environment using the Ethereum address you signed up with as the username (for increased convenience add those two lines into your `.bashrc` or `.bash_profile`).
+Sign up for a free account on the [MythX website](https://mythx.io) to generate an API key. Set the `MYTHX_API_KEY` enviroment variable by adding the following to your `.bashrc` or `.bash_profile`):
 
 ```
-export MYTHX_ETH_ADDRESS=0x(...)
-export MYTHX_PASSWORD=password
+export MYTHX_API_KEY=eyJhbGciOiJI(...)
 ```
 
 ### Analyzing a Solidity File
@@ -33,14 +32,11 @@ Run `sabre analyze <solidity-file> [contract-name]` to submit a smart contract f
 #### Analysis mode
 
 ```
---mode <quick/full>
+--mode <quick/standard/deep>
 ```
 
-MythX integrates various analysis methods including static analysis, input fuzzing and symbolic execution. In the backend, each incoming analysis job is distributed to a number of workers that perform various tasks in parallel. There are two analysis modes, "quick" and "full", that differ in the amount of resources dedicated to the analysis.
+MythX integrates various analysis methods including static analysis, input fuzzing and symbolic execution. In the backend, each incoming analysis job is distributed to a number of workers that perform various tasks in parallel. There are two analysis modes, "quick", "standard" and "deep", that differ in the amount of resources dedicated to the analysis.
 
-<p align="lsft">
-	<img src="/static/modes.png" height="250px"/>
-</p>
 
 #### Report format
 
@@ -72,5 +68,5 @@ Besides `analyze` the following commands are available.
 - list              Get a list of submitted analyses.
 - status <UUID>     Get the status of an already submitted analysis
 - version           Print Sabre Version
-- apiVersion:       Print MythX API version
+- apiVersion        Print MythX API version
 ```
