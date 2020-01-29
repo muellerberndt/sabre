@@ -1,11 +1,23 @@
 #!/usr/bin/env node
 
 const env = {
-    ethAddress: process.env.MYTHX_ETH_ADDRESS,
+    apiKey: process.env.MYTHX_API_KEY,
+    username: process.env.MYTHX_USERNAME,
     password: process.env.MYTHX_PASSWORD,
     apiUrl: process.env.MYTHX_API_URL,
-    accessToken: process.env.MYTHX_ACCESS_TOKEN
 };
+
+if (!env.username) {
+    env.username = process.env.MYTHX_ETH_ADDRESS;  // for backwards compatibility
+}
+
+let { username, password, apiUrl, accessToken } = env;
+
+if (!(username && password) && !accessToken) {
+    console.log('Unauthenticated use of MythX has been discontinued. Sign up for a free a account at https://mythx.io/ and set the MYTHX_API_KEY environment variable.');
+
+    process.exit(-1);
+}
 
 const args = require('minimist')(process.argv.slice(2), {
     boolean: [ 'help', 'noCacheLookup', 'debug' ],
