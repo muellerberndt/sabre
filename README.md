@@ -1,13 +1,9 @@
 # Sabre
 [![Discord](https://img.shields.io/discord/481002907366588416.svg)](https://discord.gg/E3YrVtG)
 
-<p align="center">
-	<img src="/static/sabre_v2.jpg" width="100%"/>
-</p>
-
 Sabre is a security analysis tool for smart contracts written in Solidity. It uses the [MythX cloud service](https://mythx.io) which detects [a wide range of security issues](https://mythx.io/swc-coverage).
 
-**Note: This client is not officially supported by MythX and may not optimally leverage all API features. Consider using the [MythX command line client](https://github.com/dmuhs/mythx-cli) for serious business.**
+**Note: Warning: This client is not officially supported by MythX and may not return optimal results. Please use the [MythX command line client](https://github.com/dmuhs/mythx-cli) in production environments .**
 
 ## Usage
 
