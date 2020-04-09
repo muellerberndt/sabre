@@ -3,7 +3,7 @@
 
 Sabre is a security analysis tool for smart contracts written in Solidity. It uses the [MythX cloud service](https://mythx.io) which detects [a wide range of security issues](https://mythx.io/swc-coverage).
 
-**Note: Warning: This client is not officially supported by MythX and may not return optimal results. Please use the [MythX command line client](https://github.com/dmuhs/mythx-cli) in production environments .**
+**Warning: This client is not officially supported by MythX and may not return optimal results. Please use the [MythX command line client](https://github.com/dmuhs/mythx-cli) in production environments .**
 
 ## Usage
 
