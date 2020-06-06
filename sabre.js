@@ -2,26 +2,15 @@
 
 const env = {
     apiKey: process.env.MYTHX_API_KEY,
-    username: process.env.MYTHX_USERNAME,
-    password: process.env.MYTHX_PASSWORD,
     apiUrl: process.env.MYTHX_API_URL,
 };
 
-if (!env.username) {
-    env.username = process.env.MYTHX_ETH_ADDRESS;  // for backwards compatibility
-}
+let { apiUrl, apiKey } = env;
 
-let { username, password, apiUrl, apiKey } = env;
-
-if (!(username && password) && !apiKey) {
-    console.log('Unauthenticated use of MythX has been discontinued. Sign up for a free a account at https://mythx.io/ and set the MYTHX_API_KEY environment variable.');
+if (!apiKey) {
+    console.log('Unauthenticated use of MythX has been discontinued. Sign up for a account at https://mythx.io/ and set the MYTHX_API_KEY environment variable.');
 
     process.exit(-1);
-}
-
-if (username && password) {
-    console.log('You are running Sabre with username/password auth which may be removed in a future version. Please use MYTHX_API_KEY instead.');
-
 }
 
 const args = require('minimist')(process.argv.slice(2), {
