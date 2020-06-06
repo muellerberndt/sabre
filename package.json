@@ -22,7 +22,7 @@
   "dependencies": {
     "@truffle/compile-solidity": "^4.2.4",
     "@truffle/contract": "^4.0.13",
-    "@truffle/resolver": "^5.0.16",
+    "@truffle/resolver": "^6.0.3",
     "axios": "^0.19.0",
     "babel-eslint": "^10.0.3",
     "eslint": "^5.16.0",
