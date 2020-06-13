@@ -54,7 +54,7 @@ You can [integrate Sabre into your own MythX tool](https://docs.mythx.io/en/late
 --debug
 ```
 
-Dump the API request and reponse when submitting an analysis.
+Dump the API request and response when submitting an analysis.
 
 ### Other commands
 
