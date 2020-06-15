@@ -65,7 +65,7 @@ Surely the assertion in `verifyPrime()` will hold for all possible inputs?
 
 
 ```
-$ solfuzz check primality.sol
+$ sabre check primality.sol
 --------------------
 ASSERTION VIOLATION!
 /Users/bernhardmueller/Desktop/primality.sol: from 21:8 to 21:33
@@ -121,7 +121,7 @@ contract FunWithNumbers {
 Better safe than sorry! Let's check some [contract invariants](https://gist.github.com/b-mueller/0916c3700c94e94b23dfa9aa650005e8) just to be 1,700% sure that everything works as expected.
 
 ```
-$ solfuzz check funwithnumbers.sol 
+$ sabre check funwithnumbers.sol 
 --------------------
 ASSERTION VIOLATION!
 /Users/bernhardmueller/Desktop/funwithnumbers.sol: from 47:17 to 47:131
@@ -178,7 +178,7 @@ Let's check just to be 15,000% sure.
 
 
 ```
-$ solfuzz check registrar.sol 
+$ sabre check registrar.sol 
 ✔ Loaded solc v0.4.25 from local cache
 ✔ Compiled with solc v0.4.25 successfully
 ✔ Analysis job submitted: https://dashboard.mythx.io/#/console/analyses/e98a345e-7418-4209-ab99-bffdc2535d9b
@@ -232,7 +232,7 @@ Given that this contract is forever paused, it should never be possible to trans
 
 
 ```
-$ solfuzz check token.sol 
+$ sabre check token.sol 
 ✔ Loaded solc v0.5.16 from local cache
 ✔ Compiled with solc v0.5.16 successfully
 ✔ Analysis job submitted: https://dashboard.mythx.io/#/console/analyses/8d4b0eb0-69d3-4d82-b6c6-bc90332a292c
