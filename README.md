@@ -1,7 +1,7 @@
 # Sabre
 [![Discord](https://img.shields.io/discord/481002907366588416.svg)](https://discord.gg/E3YrVtG)
 
-Sabre is a security analysis tool for smart contracts written in Solidity. It uses the [MythX cloud service](https://mythx.io) to:
+Sabre is a security analysis tool for smart contracts written in Solidity. It uses the [MythX symbolic execution & fuzzing service](https://mythx.io) to:
 
 - Generically detect [a wide range of security issues](https://mythx.io/swc-coverage);
 - Check for assertion violations and produce counter-examples.
