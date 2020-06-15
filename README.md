@@ -30,6 +30,12 @@ Run `sabre analyze <solidity-file> [contract-name]` to submit a smart contract f
 
 ### Custom property checking
 
+To check specifically for assertion violations and print counter-examples for any violations found, run the following:
+
+```
+$ sabre check <solidity-file> [contract-name]
+```
+
 #### Example 1: Primality test
 
 You're pretty sure that 973013 is a prime number. It ends with a "3" so why wouldn't it be??
