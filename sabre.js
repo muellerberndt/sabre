@@ -2,10 +2,10 @@
 
 const env = {
     apiKey: process.env.MYTHX_API_KEY,
-    apiUrl: process.env.MYTHX_API_URL,
+    apiUrl: process.env.MYTHX_API_URL
 };
 
-let { apiUrl, apiKey } = env;
+let { apiKey } = env;
 
 if (!apiKey) {
     console.log('Unauthenticated use of MythX has been discontinued. Sign up for a account at https://mythx.io/ and set the MYTHX_API_KEY environment variable.');
@@ -35,6 +35,10 @@ case 'list':
     break;
 case 'analyze':
     controller = require('./lib/controllers/analyze');
+    break;
+case 'check':
+    controller = require('./lib/controllers/analyze');
+    args.isCheckProperty = true;
     break;
 case 'apiVersion':
     controller = require('./lib/controllers/api_version');
