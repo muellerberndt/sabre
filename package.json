@@ -20,9 +20,9 @@
   "author": "Bernhard Mueller",
   "license": "MIT",
   "dependencies": {
-    "@truffle/compile-solidity": "^4.2.4",
-    "@truffle/contract": "^4.0.13",
-    "@truffle/resolver": "^6.0.3",
+    "@truffle/compile-solidity": "4.3.15",
+    "@truffle/contract": "4.2.15",
+    "@truffle/resolver": "6.0.11",
     "axios": "^0.19.0",
     "babel-eslint": "^10.0.3",
     "eslint": "^5.16.0",
@@ -34,10 +34,16 @@
     "remix-lib": "^0.4.12",
     "solidity-parser-antlr": "^0.4.11"
   },
+  "resolutions": {
+    "@truffle/compile-common": "0.3.2",
+    "@truffle/resolver": "6.0.11",
+    "@truffle/provisioner": "0.2.0"
+  },
   "bin": {
     "sabre": "./sabre.js"
   },
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "lint": "eslint ./sabre.js ./lib ./test",
     "lint:fix": "eslint --fix ./sabre.js ./lib ./test",
     "test": "nyc mocha"
