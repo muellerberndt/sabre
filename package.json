@@ -20,7 +20,7 @@
   "author": "Bernhard Mueller",
   "license": "MIT",
   "dependencies": {
-    "@truffle/compile-solidity": "4.3.15",
+    "@truffle/compile-solidity": "4.3.13",
     "@truffle/contract": "4.2.15",
     "@truffle/resolver": "6.0.11",
     "axios": "^0.19.0",
