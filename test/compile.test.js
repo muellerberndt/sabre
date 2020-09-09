@@ -5,6 +5,7 @@ const Profiler = require('@truffle/compile-solidity/profiler');
 const Resolver = require('@truffle/resolver');
 const solc = require('solc');
 const compiler = require('../lib/compiler');
+const Config = require("@truffle/config");
 
 const assert = chai.assert;
 
@@ -21,16 +22,20 @@ describe('Compile test', () => {
         it(`Compile contract "${file}"`, async () => {
             const filePath = path.join(contractsDir, file);
 
-            const resolvedSources = await Profiler.resolveAllSources(
-                resolver,
-                [filePath],
-                solc
-            );
+            
+            const config = Config.default();
+
+            const resolvedSources = (await Profiler.required_sources(config.with({
+                paths: [filePath],
+                resolver: resolver,
+                base_path: contractsDir,
+                contracts_directory: filePath
+              }))).allSources;
 
             const sources = {};
 
             Object.keys(resolvedSources).forEach(source => {
-                sources[source] = { content: resolvedSources[source].body };
+                sources[source] = { content: resolvedSources[source] };
             });
 
             /* Get the input config for the Solidity Compiler */
